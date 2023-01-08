@@ -48,9 +48,12 @@ class HomeView extends GetView<HomeController> {
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                   ),
-                  child: Image.asset(
-                    AppImages.imgUser,
-                    fit: BoxFit.cover,
+                  child: GestureDetector(
+                    onTap: () => Get.toNamed(Routes.PROFILE),
+                    child: Image.asset(
+                      AppImages.imgUser,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ],
