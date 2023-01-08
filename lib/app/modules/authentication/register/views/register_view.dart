@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:icp_gahara_mobile/app/common/values/app_texts.dart';
+import 'package:icp_gahara_mobile/app/routes/app_pages.dart';
 import 'package:icp_gahara_mobile/app/widgets/form_input_field.dart';
 
 import '../controllers/register_controller.dart';
@@ -100,7 +101,8 @@ class RegisterView extends GetView<RegisterController> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                 ),
-                                onPressed: () {},
+                                onPressed: () =>
+                                    Get.offAllNamed(Routes.DASHBOARD),
                                 child: Text(
                                   'Daftar',
                                   style: AppTexts.primaryPRegular.copyWith(
