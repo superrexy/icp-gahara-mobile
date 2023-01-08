@@ -34,7 +34,7 @@ flutter:
       fonts:
         - asset: assets/fonts/Outfit/Outfit-Black.ttf
           weight: 900
-        - asset: assets/fonts/Outfit/Outfit-Thin.
+        - asset: assets/fonts/Outfit/Outfit-Thin.ttf
           weight: 100
         - asset: assets/fonts/Outfit/Outfit-ExtraLight.ttf
           weight: 200
@@ -46,7 +46,7 @@ flutter:
           weight: 500
         - asset: assets/fonts/Outfit/Outfit-SemiBold.ttf
           weight: 600
-        - asset: assets/fonts/Outfit/Outfit-Bold.
+        - asset: assets/fonts/Outfit/Outfit-Bold.ttf
           weight: 700
         - asset: assets/fonts/Outfit/Outfit-ExtraBold.ttf
           weight: 800
