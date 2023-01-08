@@ -14,7 +14,7 @@ class ProfileView extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: ListView(
+        child: Column(
           children: [
             Container(
               width: Get.width,
@@ -66,107 +66,109 @@ class ProfileView extends GetView<ProfileController> {
             const SizedBox(
               height: 24,
             ),
-            Container(
-              width: 200,
-              height: 200,
-              child: Stack(
-                children: [
-                  Container(
-                    width: 200,
-                    height: 200,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 8,
-                          spreadRadius: 0.1,
-                        ),
-                      ],
+            SingleChildScrollView(
+              child: SizedBox(
+                width: 200,
+                height: 200,
+                child: Stack(
+                  children: [
+                    Container(
+                      width: 200,
+                      height: 200,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 8,
+                            spreadRadius: 0.1,
+                          ),
+                        ],
+                      ),
+                      child: GetBuilder<ProfileController>(
+                        init: ProfileController(),
+                        initState: (_) {},
+                        builder: (_) {
+                          return Center(
+                            child: controller.image == null
+                                ? Image.asset(
+                                    AppImages.imgUser,
+                                    width: 150,
+                                    height: 150,
+                                  )
+                                : ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image.file(
+                                      controller.image!,
+                                      width: 180,
+                                      height: 180,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                          );
+                        },
+                      ),
                     ),
-                    child: GetBuilder<ProfileController>(
+                    GetBuilder<ProfileController>(
                       init: ProfileController(),
                       initState: (_) {},
                       builder: (_) {
-                        return Center(
+                        return Positioned(
+                          top: 0,
+                          right: 10,
                           child: controller.image == null
-                              ? Image.asset(
-                                  AppImages.imgUser,
-                                  width: 150,
-                                  height: 150,
+                              ? GestureDetector(
+                                  onTap: () => controller.getImage(),
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                      border: Border.fromBorderSide(
+                                        BorderSide(
+                                          color: Colors.black.withOpacity(0.1),
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.edit,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
                                 )
-                              : ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: Image.file(
-                                    controller.image!,
-                                    width: 180,
-                                    height: 180,
-                                    fit: BoxFit.cover,
+                              : GestureDetector(
+                                  onTap: () => controller.resetImage(),
+                                  child: Container(
+                                    width: 50,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                      border: Border.fromBorderSide(
+                                        BorderSide(
+                                          color: Colors.black.withOpacity(0.1),
+                                          width: 1,
+                                        ),
+                                      ),
+                                    ),
+                                    child: const Center(
+                                      child: Icon(
+                                        Icons.delete,
+                                        size: 20,
+                                      ),
+                                    ),
                                   ),
                                 ),
                         );
                       },
                     ),
-                  ),
-                  GetBuilder<ProfileController>(
-                    init: ProfileController(),
-                    initState: (_) {},
-                    builder: (_) {
-                      return Positioned(
-                        top: 0,
-                        right: 10,
-                        child: controller.image == null
-                            ? GestureDetector(
-                                onTap: () => controller.getImage(),
-                                child: Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    border: Border.fromBorderSide(
-                                      BorderSide(
-                                        color: Colors.black.withOpacity(0.1),
-                                        width: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.edit,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : GestureDetector(
-                                onTap: () => controller.resetImage(),
-                                child: Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle,
-                                    border: Border.fromBorderSide(
-                                      BorderSide(
-                                        color: Colors.black.withOpacity(0.1),
-                                        width: 1,
-                                      ),
-                                    ),
-                                  ),
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.delete,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                      );
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Form(
