@@ -187,7 +187,7 @@ class HomeView extends GetView<HomeController> {
           Image.asset(
             AppImages.imgLogoTransparent,
             fit: BoxFit.cover,
-            height: Get.height * 0.2,
+            height: Get.height * 0.23,
           ),
         ],
       ),
