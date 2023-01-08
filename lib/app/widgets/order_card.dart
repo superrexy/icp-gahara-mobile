@@ -119,22 +119,8 @@ class OrderCard extends StatelessWidget {
                         fontSize: 18,
                       ),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          "Tujuan Sewa",
-                          style: AppTexts.primaryPRegular,
-                        ),
-                        const SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          "Ke Madiun",
-                          style: AppTexts.primaryPBold,
-                        )
-                      ],
-                    ),
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Tanggal Sewa",
@@ -149,7 +135,8 @@ class OrderCard extends StatelessWidget {
                         )
                       ],
                     ),
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "Tanggal Kembali",

@@ -50,14 +50,16 @@ class RentCarView extends GetView<RentCarController> {
                   Expanded(
                     child: Align(
                       alignment: Alignment.center,
-                      child: Text(
-                        isInfo
-                            ? "Informasi Mobil"
-                            : isMenuAdmin
-                                ? "Menu Mobil"
-                                : "Sewa Mobil",
-                        style: AppTexts.primaryPBold
-                            .copyWith(fontSize: 18, color: Colors.black),
+                      child: FittedBox(
+                        child: Text(
+                          isInfo
+                              ? "Informasi Mobil"
+                              : isMenuAdmin
+                                  ? "Menu Mobil"
+                                  : "Sewa Mobil",
+                          style: AppTexts.primaryPBold
+                              .copyWith(fontSize: 18, color: Colors.black),
+                        ),
                       ),
                     ),
                   ),

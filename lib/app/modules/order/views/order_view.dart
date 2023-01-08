@@ -48,10 +48,12 @@ class OrderView extends GetView<OrderController> {
                     Expanded(
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text(
-                          'Daftar Pesanan',
-                          style: AppTexts.primaryPBold
-                              .copyWith(fontSize: 18, color: Colors.black),
+                        child: FittedBox(
+                          child: Text(
+                            'Daftar Pesanan',
+                            style: AppTexts.primaryPBold
+                                .copyWith(fontSize: 18, color: Colors.black),
+                          ),
                         ),
                       ),
                     ),
