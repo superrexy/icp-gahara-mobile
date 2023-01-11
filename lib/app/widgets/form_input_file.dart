@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:icp_gahara_mobile/app/common/values/app_colors.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_texts.dart';
 
 class FormInputFile extends StatelessWidget {

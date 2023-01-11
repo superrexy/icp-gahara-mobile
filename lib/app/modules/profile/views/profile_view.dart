@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:icp_gahara_mobile/app/common/values/app_constants.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_images.dart';
 import 'package:icp_gahara_mobile/app/widgets/form_input_field.dart';
 
@@ -90,14 +91,9 @@ class ProfileView extends GetView<ProfileController> {
                         init: ProfileController(),
                         initState: (_) {},
                         builder: (_) {
-                          return Center(
-                            child: controller.image == null
-                                ? Image.asset(
-                                    AppImages.imgUser,
-                                    width: 150,
-                                    height: 150,
-                                  )
-                                : ClipRRect(
+                          return controller.image != null
+                              ? Center(
+                                  child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
                                     child: Image.file(
                                       controller.image!,
@@ -106,7 +102,30 @@ class ProfileView extends GetView<ProfileController> {
                                       fit: BoxFit.cover,
                                     ),
                                   ),
-                          );
+                                )
+                              : controller.imageUrl!.isNotEmpty
+                                  ? Center(
+                                      child: Center(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: Image.network(
+                                            AppConstants.baseURL +
+                                                controller.imageUrl!,
+                                            width: 180,
+                                            height: 180,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Center(
+                                      child: Image.asset(
+                                        AppImages.imgUser,
+                                        width: 150,
+                                        height: 150,
+                                      ),
+                                    );
                         },
                       ),
                     ),
@@ -172,6 +191,7 @@ class ProfileView extends GetView<ProfileController> {
               ),
             ),
             Form(
+              key: controller.formKey,
               child: Padding(
                 padding: const EdgeInsets.symmetric(
                   vertical: 12.0,
@@ -180,23 +200,28 @@ class ProfileView extends GetView<ProfileController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const FormInputField(
+                    FormInputField(
                       hintText: "Masukkan Nama Lengkap Anda",
                       labelText: "Nama Lengkap",
                       isRequired: true,
                       textInputAction: TextInputAction.next,
+                      controller: controller.nameController,
                     ),
-                    const FormInputField(
+                    FormInputField(
                       hintText: "Masukkan Alamat Anda",
                       labelText: "Alamat",
                       isTextArea: true,
                       textInputAction: TextInputAction.next,
+                      controller: controller.addressController,
                     ),
-                    const FormInputField(
+                    FormInputField(
                       hintText: "Masukkan Nomer HP Anda",
                       labelText: "Nomer HP",
                       isRequired: true,
                       textInputAction: TextInputAction.send,
+                      onFieldSubmitted: (val) => controller.onSubmit(),
+                      controller: controller.phoneController,
+                      keyboardType: TextInputType.phone,
                     ),
                     const SizedBox(
                       height: 16,
@@ -204,7 +229,7 @@ class ProfileView extends GetView<ProfileController> {
                     SizedBox(
                       width: Get.width,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => controller.onSubmit(),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
                           padding: const EdgeInsets.all(18.0),

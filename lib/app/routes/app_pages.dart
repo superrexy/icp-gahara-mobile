@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:icp_gahara_mobile/app/modules/order/views/detail_order_view.dart';
 
 import '../modules/authentication/login/bindings/login_binding.dart';
 import '../modules/authentication/login/views/login_view.dart';
@@ -13,6 +12,7 @@ import '../modules/location/bindings/location_binding.dart';
 import '../modules/location/views/form_location_view.dart';
 import '../modules/location/views/location_view.dart';
 import '../modules/order/bindings/order_binding.dart';
+import '../modules/order/views/detail_order_view.dart';
 import '../modules/order/views/order_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';

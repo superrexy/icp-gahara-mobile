@@ -55,6 +55,8 @@ class LoginView extends GetView<LoginController> {
                       children: [
                         FormInputField(
                           controller: controller.emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          textCapitalization: TextCapitalization.none,
                           textInputAction: TextInputAction.next,
                           hintText: 'Masukkan Email Anda',
                           labelText: 'Email',
@@ -63,10 +65,15 @@ class LoginView extends GetView<LoginController> {
                         Obx(
                           () => FormInputField(
                             controller: controller.passwordController,
+                            keyboardType: TextInputType.visiblePassword,
                             textInputAction: TextInputAction.send,
+                            textCapitalization: TextCapitalization.none,
+                            onFieldSubmitted: (val) => controller.onSubmit(),
                             hintText: 'Masukkan Password Anda',
                             labelText: 'Password',
                             obscureText: controller.isVisiblePassword.value,
+                            onPasswordVisibilityChanged: () =>
+                                controller.isVisiblePassword.toggle(),
                             prefixIcon: const Icon(Icons.key),
                           ),
                         ),
@@ -83,7 +90,7 @@ class LoginView extends GetView<LoginController> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                             ),
-                            onPressed: () => Get.offAllNamed(Routes.DASHBOARD),
+                            onPressed: () => controller.onSubmit(),
                             child: Text(
                               'Masuk',
                               style: AppTexts.primaryPRegular

@@ -63,118 +63,119 @@ class FormLocationView extends GetView<FormLocationController> {
               ),
             ),
             Form(
+                key: controller.formKey,
                 child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-              child: Column(
-                children: [
-                  Container(
-                    width: Get.width,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Lokasi Rental Mobil",
-                          style: AppTexts.primaryPBold
-                              .copyWith(fontSize: 18, color: Colors.black),
-                        ),
-                        Text(
-                          "Isi data lokasi rental mobil dengan benar",
-                          style: AppTexts.primaryPRegular.copyWith(
-                              fontSize: 14,
-                              color: AppColors.secondaryColor.shade700,
-                              fontWeight: FontWeight.w300),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        FormInputField(
-                          controller: TextEditingController(),
-                          hintText: "Masukkan Alamat Rental Mobil",
-                          labelText: "Alamat Rental Mobil",
-                          isRequired: true,
-                          textInputAction: TextInputAction.next,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                    width: Get.width,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Latitude & Longitude Rental Mobil",
-                          style: AppTexts.primaryPBold
-                              .copyWith(fontSize: 18, color: Colors.black),
-                        ),
-                        Text(
-                          "Isi data latitude & longitude rental mobil dengan benar",
-                          style: AppTexts.primaryPRegular.copyWith(
-                              fontSize: 14,
-                              color: AppColors.secondaryColor.shade700,
-                              fontWeight: FontWeight.w300),
-                        ),
-                        const SizedBox(
-                          height: 16,
-                        ),
-                        FormInputField(
-                          controller: TextEditingController(),
-                          hintText: "Masukkan Latitude / -6.193125",
-                          labelText: "Latitude",
-                          isRequired: true,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.number,
-                        ),
-                        FormInputField(
-                          controller: TextEditingController(),
-                          hintText: "Masukkan Longitude / 106.821810",
-                          labelText: "Longitude",
-                          isRequired: true,
-                          textInputAction: TextInputAction.next,
-                          keyboardType: TextInputType.number,
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  SizedBox(
-                    width: Get.width,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 12.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: Get.width,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 16,
-                        ),
-                        shape: RoundedRectangleBorder(
+                            horizontal: 16, vertical: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(12.0),
                         ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Lokasi Rental Mobil",
+                              style: AppTexts.primaryPBold
+                                  .copyWith(fontSize: 18, color: Colors.black),
+                            ),
+                            Text(
+                              "Isi data lokasi rental mobil dengan benar",
+                              style: AppTexts.primaryPRegular.copyWith(
+                                  fontSize: 14,
+                                  color: AppColors.secondaryColor.shade700,
+                                  fontWeight: FontWeight.w300),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            FormInputField(
+                              controller: controller.addressController,
+                              hintText: "Masukkan Alamat Rental Mobil",
+                              labelText: "Alamat Rental Mobil",
+                              isRequired: true,
+                              textInputAction: TextInputAction.next,
+                            ),
+                          ],
+                        ),
                       ),
-                      onPressed: () {},
-                      child: const Text("Simpan"),
-                    ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Container(
+                        width: Get.width,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Latitude & Longitude Rental Mobil",
+                              style: AppTexts.primaryPBold
+                                  .copyWith(fontSize: 18, color: Colors.black),
+                            ),
+                            Text(
+                              "Isi data latitude & longitude rental mobil dengan benar",
+                              style: AppTexts.primaryPRegular.copyWith(
+                                  fontSize: 14,
+                                  color: AppColors.secondaryColor.shade700,
+                                  fontWeight: FontWeight.w300),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            FormInputField(
+                              controller: controller.latitudeController,
+                              hintText: "Masukkan Latitude / -6.193125",
+                              labelText: "Latitude",
+                              isRequired: true,
+                              textInputAction: TextInputAction.next,
+                              keyboardType: TextInputType.number,
+                            ),
+                            FormInputField(
+                              controller: controller.longitudeController,
+                              hintText: "Masukkan Longitude / 106.821810",
+                              labelText: "Longitude",
+                              isRequired: true,
+                              textInputAction: TextInputAction.done,
+                              keyboardType: TextInputType.number,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      SizedBox(
+                        width: Get.width,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 16,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                          ),
+                          onPressed: () => controller.onSubmit(),
+                          child: const Text("Simpan"),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ))
+                ))
           ],
         ),
       ),

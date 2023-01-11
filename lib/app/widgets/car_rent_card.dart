@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import 'package:icp_gahara_mobile/app/common/values/app_colors.dart';
-import 'package:icp_gahara_mobile/app/common/values/app_images.dart';
+import 'package:icp_gahara_mobile/app/common/values/app_constants.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_texts.dart';
+import 'package:icp_gahara_mobile/app/model/response/cars_response.dart';
 import 'package:icp_gahara_mobile/app/routes/app_pages.dart';
 
+import '../common/utils/extensions.dart';
+
 class CarRentCard extends StatelessWidget {
-  const CarRentCard({super.key, this.isAdmin = false, this.isInfo = false});
+  const CarRentCard(
+      {super.key,
+      this.isAdmin = false,
+      this.isInfo = false,
+      required this.data,
+      this.onDelete});
   final bool? isAdmin;
   final bool? isInfo;
+  final CarsDataResponse data;
+  final Function()? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +27,7 @@ class CarRentCard extends StatelessWidget {
         Get.toNamed(Routes.DETAIL_RENT_CAR, arguments: {
           "isMenuAdmin": isAdmin,
           "isInfo": isInfo,
+          "carId": data.id,
         });
       },
       child: Container(
@@ -53,6 +62,7 @@ class CarRentCard extends StatelessWidget {
                   IconButton(
                     onPressed: () => Get.toNamed(Routes.FORM_CAR, arguments: {
                       "isUpdate": true,
+                      "carId": data.id,
                     }),
                     icon: const Icon(Icons.edit, color: Colors.yellow),
                   ),
@@ -67,9 +77,7 @@ class CarRentCard extends StatelessWidget {
                         confirmTextColor: Colors.white,
                         cancelTextColor: Colors.black,
                         buttonColor: Colors.green,
-                        onConfirm: () {
-                          Get.closeAllSnackbars();
-                        },
+                        onConfirm: onDelete,
                         onCancel: () {
                           Get.closeAllSnackbars();
                         },
@@ -80,10 +88,13 @@ class CarRentCard extends StatelessWidget {
                 ],
               ),
             ),
-            Image.asset(
-              AppImages.imgCar2,
-              fit: BoxFit.cover,
-              width: 300,
+            Container(
+              constraints: const BoxConstraints(maxHeight: 200),
+              child: Image.network(
+                AppConstants.baseURL + data.image,
+                fit: BoxFit.cover,
+                width: 300,
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -94,11 +105,12 @@ class CarRentCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Porsche 911",
+                        data.name,
                         style: AppTexts.primaryPBold
                             .copyWith(fontSize: 18, color: Colors.black),
                       ),
-                      Text("2 Seat", style: AppTexts.primaryPRegular),
+                      Text("${data.seats} Seat",
+                          style: AppTexts.primaryPRegular),
                     ],
                   ),
                 ),
@@ -111,9 +123,9 @@ class CarRentCard extends StatelessWidget {
                         width: 130,
                         child: FittedBox(
                           child: Text(
-                            "Rp. 250.000.000",
+                            data.price.formatCurrencyIDR(),
                             style: AppTexts.primaryPBold.copyWith(
-                              fontSize: 18,
+                              fontSize: 16,
                               color: Colors.black,
                             ),
                             maxLines: 1,
@@ -126,7 +138,7 @@ class CarRentCard extends StatelessWidget {
                         child: Text(
                           "/hari",
                           style: AppTexts.primaryPRegular.copyWith(
-                            fontSize: 12,
+                            fontSize: 16,
                             color: AppColors.secondaryColor.shade900,
                           ),
                           maxLines: 1,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
-
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -9,19 +8,7 @@ import '../../../common/values/app_texts.dart';
 import '../controllers/location_controller.dart';
 
 class LocationView extends GetView<LocationController> {
-  LocationView({Key? key}) : super(key: key);
-  final markers = <Marker>[
-    Marker(
-      width: 80,
-      height: 80,
-      point: LatLng(-7.8848241, 111.4943993),
-      builder: (ctx) => const Icon(
-        Icons.location_on,
-        color: Colors.red,
-        size: 40,
-      ),
-    ),
-  ];
+  const LocationView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,21 +65,41 @@ class LocationView extends GetView<LocationController> {
               ),
             ),
             Expanded(
-              child: FlutterMap(
-                options: MapOptions(
-                  center: LatLng(-7.8848241, 111.4943993),
-                  zoom: 10,
-                ),
-                children: [
-                  TileLayer(
-                    urlTemplate:
-                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+              child: Obx(
+                () => FlutterMap(
+                  mapController: controller.mapController,
+                  options: MapOptions(
+                    center: LatLng(
+                      controller.latitudeController.value,
+                      controller.longitudeController.value,
+                    ),
+                    zoom: 10,
                   ),
-                  MarkerLayer(
-                    markers: markers,
-                  )
-                ],
+                  children: [
+                    TileLayer(
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+                    ),
+                    MarkerLayer(
+                      markers: [
+                        Marker(
+                          width: 80,
+                          height: 80,
+                          point: LatLng(
+                            controller.latitudeController.value,
+                            controller.longitudeController.value,
+                          ),
+                          builder: (ctx) => const Icon(
+                            Icons.location_on,
+                            color: Colors.red,
+                            size: 40,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -107,6 +114,7 @@ class LocationView extends GetView<LocationController> {
                   ),
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       child: Row(
@@ -124,11 +132,13 @@ class LocationView extends GetView<LocationController> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    Text(
-                      'Jl. Muria No.29, Bangunsari, Kec. Ponorogo, Kabupaten Ponorogo, Jawa Timur 63419',
-                      style: AppTexts.primaryPRegular.copyWith(
-                        fontSize: 14,
-                        color: Colors.black,
+                    Obx(
+                      () => Text(
+                        controller.addressController.value,
+                        style: AppTexts.primaryPRegular.copyWith(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
                       ),
                     ),
                   ],

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:icp_gahara_mobile/app/modules/rent_car/controllers/form_rent_car_controller.dart';
 import 'package:icp_gahara_mobile/app/routes/app_pages.dart';
+import 'package:icp_gahara_mobile/app/widgets/form_input_datetime.dart';
 import 'package:icp_gahara_mobile/app/widgets/form_input_field.dart';
 
 import '../../../common/values/app_colors.dart';
@@ -171,20 +172,62 @@ class FormRentCarView extends GetView<FormRentCarController> {
                                   isRequired: true,
                                   textInputAction: TextInputAction.next,
                                 ),
-                                FormInputField(
+                                FormInputDateTime(
                                   controller: controller.tanggalSewaController,
-                                  hintText: "Masukkan Tanggal Sewa",
                                   labelText: "Tanggal Sewa",
+                                  hintText: "Masukkan Tanggal Sewa",
                                   isRequired: true,
                                   textInputAction: TextInputAction.next,
+                                  firstDate: DateTime.now(),
+                                  lastDate: DateTime.now().add(
+                                    const Duration(days: 30),
+                                  ),
+                                  onChange: (value) {
+                                    if (value != null) {
+                                      controller.isDateSelected.value = true;
+                                    }
+                                  },
                                 ),
-                                FormInputField(
-                                  controller:
-                                      controller.tanggalKembaliController,
-                                  hintText: "Masukkan Tanggal Kembali",
-                                  labelText: "Tanggal Kembali",
-                                  isRequired: true,
-                                  textInputAction: TextInputAction.next,
+                                Obx(
+                                  () => FormInputDateTime(
+                                    enabled:
+                                        controller.isDateSelected.value == true,
+                                    controller:
+                                        controller.tanggalKembaliController,
+                                    labelText: "Tanggal Kembali",
+                                    hintText: "Masukkan Tanggal Kembali",
+                                    isRequired: true,
+                                    textInputAction: TextInputAction.next,
+                                    initialDate:
+                                        controller.tanggalSewaController.text !=
+                                                ""
+                                            ? DateTime.parse(controller
+                                                    .tanggalSewaController.text)
+                                                .add(
+                                                const Duration(),
+                                              )
+                                            : DateTime.now(),
+                                    firstDate:
+                                        controller.tanggalSewaController.text !=
+                                                ""
+                                            ? DateTime.parse(controller
+                                                    .tanggalSewaController.text)
+                                                .add(
+                                                const Duration(),
+                                              )
+                                            : DateTime.now(),
+                                    lastDate:
+                                        controller.tanggalSewaController.text !=
+                                                ""
+                                            ? DateTime.parse(controller
+                                                    .tanggalSewaController.text)
+                                                .add(
+                                                const Duration(days: 30),
+                                              )
+                                            : DateTime.now().add(
+                                                const Duration(days: 30),
+                                              ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -195,8 +238,7 @@ class FormRentCarView extends GetView<FormRentCarController> {
                           SizedBox(
                             width: Get.width,
                             child: ElevatedButton(
-                              onPressed: () =>
-                                  Get.toNamed(Routes.FORM_DETAIL_RENT_CAR),
+                              onPressed: () => controller.validationPage(),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green,
                                 padding: const EdgeInsets.symmetric(

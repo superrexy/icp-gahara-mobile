@@ -20,6 +20,7 @@ abstract class Routes {
   static const SPLASH = _Paths.SPLASH;
   static const ORDER = _Paths.ORDER;
   static const DETAIL_ORDER = _Paths.DETAIL_ORDER;
+  static const ONBOARDING = _Paths.ONBOARDING;
 }
 
 abstract class _Paths {
@@ -41,4 +42,5 @@ abstract class _Paths {
   static const SPLASH = '/splash';
   static const ORDER = '/order';
   static const DETAIL_ORDER = '/order/detail';
+  static const ONBOARDING = '/onboarding';
 }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:icp_gahara_mobile/app/common/utils/extensions.dart';
+import 'package:icp_gahara_mobile/app/common/utils/helpers.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_colors.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_texts.dart';
 import 'package:icp_gahara_mobile/app/modules/rent_car/controllers/form_rent_car_controller.dart';
@@ -150,11 +152,14 @@ class FormDetailRentCarView extends GetView<FormRentCarController> {
                               ),
                               TextFormItem(
                                 label: "Lama Sewa",
-                                controller: controller.tanggalSewaController,
+                                isTextEditingController: false,
+                                text: "${controller.totalDays} Hari",
                               ),
                               TextFormItem(
                                 label: "Total Harga",
-                                controller: controller.tanggalKembaliController,
+                                isTextEditingController: false,
+                                text: controller.totalPrice.value
+                                    .formatCurrencyIDR(),
                               ),
                             ],
                           ),
@@ -165,7 +170,7 @@ class FormDetailRentCarView extends GetView<FormRentCarController> {
                         SizedBox(
                           width: Get.width,
                           child: ElevatedButton(
-                            onPressed: () => Get.toNamed(Routes.SUCCESS),
+                            onPressed: () => controller.onSubmit(),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
                               padding: const EdgeInsets.symmetric(
@@ -193,12 +198,16 @@ class FormDetailRentCarView extends GetView<FormRentCarController> {
 class TextFormItem extends StatelessWidget {
   const TextFormItem({
     Key? key,
-    required this.controller,
+    this.controller,
     required this.label,
+    this.isTextEditingController = true,
+    this.text,
   }) : super(key: key);
 
   final String label;
-  final TextEditingController controller;
+  final TextEditingController? controller;
+  final bool? isTextEditingController;
+  final String? text;
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +215,7 @@ class TextFormItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: AppTexts.primaryPBold),
-        Text(controller.text),
+        isTextEditingController! ? Text(controller!.text) : Text(text!),
         const SizedBox(
           height: 12,
         ),

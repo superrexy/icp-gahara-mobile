@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:icp_gahara_mobile/app/common/values/app_images.dart';
+import 'package:icp_gahara_mobile/app/common/values/app_constants.dart';
 import 'package:icp_gahara_mobile/app/widgets/order_card.dart';
 
 import '../../../common/values/app_colors.dart';
@@ -90,23 +89,62 @@ class OrderView extends GetView<OrderController> {
                     vertical: 12.0,
                     horizontal: 16.0,
                   ),
-                  child: TabBarView(
-                    children: [
-                      ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return OrderCard();
-                        },
-                        itemCount: 5,
-                      ),
-                      ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return OrderCard();
-                        },
-                        itemCount: 3,
-                      ),
-                    ],
+                  child: Obx(
+                    () => TabBarView(
+                      children: [
+                        controller.ordersActive.isNotEmpty
+                            ? ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final order = controller.ordersActive[index];
+                                  return OrderCard(
+                                    data: order,
+                                    onConfirm: () => controller.doneOrder(
+                                      order,
+                                    ),
+                                    isAdmin: controller
+                                        .dashboardController.user.value.role
+                                        .contains(
+                                      AppConstants.roleAdmin,
+                                    ),
+                                  );
+                                },
+                                itemCount: controller.ordersActive.length,
+                              )
+                            : Center(
+                                child: Text(
+                                  "Pesanan Aktif Kosong",
+                                  style: AppTexts.primaryPBold,
+                                ),
+                              ),
+                        controller.ordersInactive.isNotEmpty
+                            ? ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final order =
+                                      controller.ordersInactive[index];
+                                  return OrderCard(
+                                    data: order,
+                                    onConfirm: () => controller.doneOrder(
+                                      order,
+                                    ),
+                                    isAdmin: controller
+                                        .dashboardController.user.value.role
+                                        .contains(
+                                      AppConstants.roleAdmin,
+                                    ),
+                                  );
+                                },
+                                itemCount: controller.ordersInactive.length,
+                              )
+                            : Center(
+                                child: Text(
+                                  "Pesanan Selesai Kosong",
+                                  style: AppTexts.primaryPBold,
+                                ),
+                              ),
+                      ],
+                    ),
                   ),
                 ),
               ),

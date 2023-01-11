@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import 'package:icp_gahara_mobile/app/common/values/app_colors.dart';
+import 'package:icp_gahara_mobile/app/common/values/app_constants.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_images.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_texts.dart';
 import 'package:icp_gahara_mobile/app/routes/app_pages.dart';
@@ -43,16 +44,29 @@ class HomeView extends GetView<HomeController> {
                 Container(
                   width: 40,
                   height: 40,
-                  padding: const EdgeInsets.all(4),
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(100)),
                   ),
-                  child: GestureDetector(
-                    onTap: () => Get.toNamed(Routes.PROFILE),
-                    child: Image.asset(
-                      AppImages.imgUser,
-                      fit: BoxFit.cover,
+                  child: Obx(
+                    () => GestureDetector(
+                      onTap: () => Get.toNamed(Routes.PROFILE),
+                      child:
+                          controller.dashboardController.user.value.userImage !=
+                                  null
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Image.network(
+                                    AppConstants.baseURL +
+                                        controller.dashboardController.user
+                                            .value.userImage!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : Image.asset(
+                                  AppImages.imgUser,
+                                  fit: BoxFit.cover,
+                                ),
                     ),
                   ),
                 ),
@@ -71,29 +85,35 @@ class HomeView extends GetView<HomeController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 120,
-                    height: 120,
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () => Get.toNamed(Routes.RENT_CAR),
-                          child: Container(
-                            height: 80,
-                            padding: const EdgeInsets.all(20.0),
-                            margin: const EdgeInsets.only(bottom: 8.0),
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryColor,
-                              borderRadius: BorderRadius.circular(9),
+                  Obx(
+                    () => Visibility(
+                      visible: controller.dashboardController.user.value.role !=
+                          "admin",
+                      child: Container(
+                        width: 120,
+                        height: 120,
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              onTap: () => Get.toNamed(Routes.RENT_CAR),
+                              child: Container(
+                                height: 80,
+                                padding: const EdgeInsets.all(20.0),
+                                margin: const EdgeInsets.only(bottom: 8.0),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(9),
+                                ),
+                                child: SvgPicture.asset(
+                                  AppImages.icRent,
+                                  width: 40,
+                                ),
+                              ),
                             ),
-                            child: SvgPicture.asset(
-                              AppImages.icRent,
-                              width: 40,
-                            ),
-                          ),
+                            Text("Sewa Mobil", style: AppTexts.primaryPRegular),
+                          ],
                         ),
-                        Text("Sewa Mobil", style: AppTexts.primaryPRegular),
-                      ],
+                      ),
                     ),
                   ),
                   Container(
@@ -158,7 +178,9 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Get.toNamed(Routes.LOCATION),
+                    onTap: () {
+                      Get.toNamed(Routes.LOCATION);
+                    },
                     child: Container(
                       width: 120,
                       height: 120,

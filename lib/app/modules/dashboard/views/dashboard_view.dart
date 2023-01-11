@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:icp_gahara_mobile/app/common/values/app_colors.dart';
 
 import 'package:icp_gahara_mobile/app/modules/home/views/home_view.dart';
 import 'package:icp_gahara_mobile/app/modules/settings/views/settings_view.dart';

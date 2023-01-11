@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:icp_gahara_mobile/app/common/storage/storage.dart';
+import 'package:icp_gahara_mobile/app/common/values/app_constants.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_images.dart';
 import 'package:icp_gahara_mobile/app/routes/app_pages.dart';
 
@@ -66,15 +68,25 @@ class SettingsView extends GetView<SettingsController> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        width: Get.height * 0.06,
-                        height: Get.height * 0.06,
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(100),
-                          image: const DecorationImage(
-                            image: AssetImage(AppImages.imgUser),
+                      Obx(
+                        () => Container(
+                          width: Get.height * 0.06,
+                          height: Get.height * 0.06,
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(100),
+                            image: DecorationImage(
+                              image: controller.dashboardController.user.value
+                                          .userImage !=
+                                      null
+                                  ? NetworkImage(AppConstants.baseURL +
+                                      controller.dashboardController.user.value
+                                          .userImage!)
+                                  : const AssetImage(AppImages.imgUser)
+                                      as ImageProvider,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
@@ -89,9 +101,13 @@ class SettingsView extends GetView<SettingsController> {
                             style:
                                 AppTexts.primaryPRegular.copyWith(fontSize: 14),
                           ),
-                          Text(
-                            "Bintang Rezeka Ramadani",
-                            style: AppTexts.primaryPBold.copyWith(fontSize: 16),
+                          Obx(
+                            () => Text(
+                              controller
+                                  .dashboardController.user.value.fullName,
+                              style:
+                                  AppTexts.primaryPBold.copyWith(fontSize: 16),
+                            ),
                           ),
                         ],
                       )
@@ -115,36 +131,40 @@ class SettingsView extends GetView<SettingsController> {
                     icon: const Icon(Icons.settings),
                     onTap: () => Get.toNamed(Routes.PROFILE),
                   ),
-                  Visibility(
-                    visible: true,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Pengaturan Admin",
-                          style: AppTexts.primaryPBold.copyWith(fontSize: 16),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        OptionMenuItem(
-                          label: "Daftar Pesanan",
-                          icon: const Icon(Icons.list),
-                          onTap: () => Get.toNamed(Routes.ORDER),
-                        ),
-                        OptionMenuItem(
-                          label: "Menu Mobil",
-                          icon: const Icon(Icons.add_box),
-                          onTap: () => Get.toNamed(Routes.RENT_CAR, arguments: {
-                            "isMenuAdmin": true,
-                          }),
-                        ),
-                        OptionMenuItem(
-                          label: "Update Lokasi",
-                          icon: const Icon(Icons.location_on),
-                          onTap: () => Get.toNamed(Routes.FORM_LOCATION),
-                        ),
-                      ],
+                  Obx(
+                    () => Visibility(
+                      visible: controller.dashboardController.user.value.role
+                          .contains(AppConstants.roleAdmin),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Pengaturan Admin",
+                            style: AppTexts.primaryPBold.copyWith(fontSize: 16),
+                          ),
+                          const SizedBox(
+                            height: 12,
+                          ),
+                          OptionMenuItem(
+                            label: "Daftar Pesanan",
+                            icon: const Icon(Icons.list),
+                            onTap: () => Get.toNamed(Routes.ORDER),
+                          ),
+                          OptionMenuItem(
+                            label: "Menu Mobil",
+                            icon: const Icon(Icons.add_box),
+                            onTap: () =>
+                                Get.toNamed(Routes.RENT_CAR, arguments: {
+                              "isMenuAdmin": true,
+                            }),
+                          ),
+                          OptionMenuItem(
+                            label: "Update Lokasi",
+                            icon: const Icon(Icons.location_on),
+                            onTap: () => Get.toNamed(Routes.FORM_LOCATION),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   OptionMenuItem(
@@ -152,7 +172,11 @@ class SettingsView extends GetView<SettingsController> {
                     icon: const Icon(Icons.exit_to_app, color: Colors.white),
                     color: Colors.red.shade500,
                     isDark: true,
-                    onTap: () => Get.offAllNamed(Routes.LOGIN),
+                    onTap: () {
+                      Storage.removeValue(AppConstants.token);
+
+                      Get.offAllNamed(Routes.LOGIN);
+                    },
                   ),
                 ],
               ),

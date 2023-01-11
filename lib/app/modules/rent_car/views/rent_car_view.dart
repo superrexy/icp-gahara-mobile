@@ -86,29 +86,30 @@ class RentCarView extends GetView<RentCarController> {
                 child: Container(
                   margin: const EdgeInsets.only(top: 16),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    children: [
-                      CarRentCard(
-                        isAdmin: isMenuAdmin,
-                        isInfo: isInfo,
-                      ),
-                      CarRentCard(
-                        isAdmin: isMenuAdmin,
-                        isInfo: isInfo,
-                      ),
-                      CarRentCard(
-                        isAdmin: isMenuAdmin,
-                        isInfo: isInfo,
-                      ),
-                      CarRentCard(
-                        isAdmin: isMenuAdmin,
-                        isInfo: isInfo,
-                      ),
-                      CarRentCard(
-                        isAdmin: isMenuAdmin,
-                        isInfo: isInfo,
-                      ),
-                    ],
+                  child: Obx(
+                    () => controller.cars.isEmpty
+                        ? Container(
+                            height: Get.height * 0.8,
+                            child: Center(
+                              child: Text(
+                                "Data Mobil Masih Kosong",
+                                style: AppTexts.primaryPBold,
+                              ),
+                            ),
+                          )
+                        : Column(
+                            children: controller.cars
+                                .map(
+                                  (element) => CarRentCard(
+                                    isAdmin: isMenuAdmin,
+                                    isInfo: isInfo,
+                                    data: element,
+                                    onDelete: () =>
+                                        controller.deleteCar(element.id),
+                                  ),
+                                )
+                                .toList(),
+                          ),
                   ),
                 ),
               ),

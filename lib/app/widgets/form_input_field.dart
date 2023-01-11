@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/utils.dart';
 
 import 'package:icp_gahara_mobile/app/common/values/app_colors.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_texts.dart';
@@ -18,6 +19,8 @@ class FormInputField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.textCapitalization,
     this.isTextArea = false,
+    this.customValidation = false,
+    this.customValidationFunction,
   });
   final String hintText;
   final String labelText;
@@ -33,6 +36,8 @@ class FormInputField extends StatelessWidget {
 
   final bool? isRequired;
   final bool? isTextArea;
+  final bool? customValidation;
+  final Function(String?)? customValidationFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -67,12 +72,56 @@ class FormInputField extends StatelessWidget {
             textInputAction: textInputAction,
             onFieldSubmitted: onFieldSubmitted,
             maxLines: isTextArea! ? 3 : 1,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: (value) {
+              if (customValidation!) {
+                return customValidationFunction!(value);
+              }
+
+              if (isRequired!) {
+                if (value!.isEmpty) {
+                  return 'Field ini tidak boleh kosong';
+                }
+
+                if (keyboardType == TextInputType.emailAddress) {
+                  if (!GetUtils.isEmail(value)) {
+                    return 'Email tidak valid';
+                  }
+                }
+
+                if (keyboardType == TextInputType.url) {
+                  if (!GetUtils.isURL(value)) {
+                    return 'URL tidak valid';
+                  }
+                }
+
+                if (keyboardType == TextInputType.datetime) {
+                  if (!GetUtils.isDateTime(value)) {
+                    return 'Tanggal tidak valid';
+                  }
+                }
+
+                if (keyboardType == TextInputType.visiblePassword) {
+                  if (!GetUtils.isLengthGreaterThan(value, 6)) {
+                    return 'Password harus lebih dari 6 karakter';
+                  }
+                }
+
+                if (keyboardType == TextInputType.text) {
+                  if (!GetUtils.isLengthGreaterThan(value, 3)) {
+                    return 'Karakter harus lebih dari 3';
+                  }
+                }
+              }
+
+              return null;
+            },
             decoration: InputDecoration(
               prefixIcon: prefixIcon,
               hintText: hintText,
               fillColor: AppColors.secondaryColor,
               filled: true,
-              suffixIcon: obscureText
+              suffixIcon: onPasswordVisibilityChanged != null
                   ? IconButton(
                       icon: obscureText
                           ? const Icon(Icons.visibility_off)

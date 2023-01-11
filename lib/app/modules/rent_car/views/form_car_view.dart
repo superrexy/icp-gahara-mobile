@@ -49,7 +49,7 @@ class FormCarView extends GetView<FormCarController> {
                       alignment: Alignment.center,
                       child: Text(
                         args?['isUpdate'] != null
-                            ? 'Update Mobil'
+                            ? 'Edit Mobil'
                             : 'Tambah Mobil',
                         style: AppTexts.primaryPBold
                             .copyWith(fontSize: 18, color: Colors.black),
@@ -70,6 +70,7 @@ class FormCarView extends GetView<FormCarController> {
             Expanded(
               child: SingleChildScrollView(
                 child: Form(
+                  key: controller.formKey,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 12.0),
@@ -108,7 +109,9 @@ class FormCarView extends GetView<FormCarController> {
                                     label: "Unggah Foto Mobil",
                                     changeImage: () => controller.getImage(),
                                     resetImage: () => controller.resetImage(),
-                                    fromInternet: false,
+                                    fromInternet:
+                                        controller.isImageFromInternet.value,
+                                    imageUrl: controller.urlImage.value,
                                     valueImage: controller.image,
                                   );
                                 },
@@ -138,29 +141,31 @@ class FormCarView extends GetView<FormCarController> {
                               Text(
                                 "Isi data mobil dengan benar",
                                 style: AppTexts.primaryPRegular.copyWith(
-                                    fontSize: 14,
-                                    color: AppColors.secondaryColor.shade700,
-                                    fontWeight: FontWeight.w300),
+                                  fontSize: 14,
+                                  color: AppColors.secondaryColor.shade700,
+                                  fontWeight: FontWeight.w300,
+                                ),
                               ),
                               const SizedBox(
                                 height: 16,
                               ),
                               FormInputField(
-                                controller: TextEditingController(),
+                                controller: controller.nameController,
                                 hintText: "Masukkan Nama Mobil",
                                 labelText: "Nama Mobil",
                                 isRequired: true,
                                 textInputAction: TextInputAction.next,
                               ),
                               FormInputField(
-                                controller: TextEditingController(),
+                                controller: controller.typeController,
                                 hintText: "Masukkan Tipe Mobil",
                                 labelText: "Tipe Mobil",
                                 isRequired: true,
                                 textInputAction: TextInputAction.next,
                               ),
                               FormInputField(
-                                controller: TextEditingController(),
+                                isRequired: true,
+                                controller: controller.descriptionController,
                                 hintText: "Masukkan Deskripsi Mobil",
                                 labelText: "Deskripsi Mobil",
                                 textInputAction: TextInputAction.next,
@@ -199,7 +204,7 @@ class FormCarView extends GetView<FormCarController> {
                                 height: 16,
                               ),
                               FormInputField(
-                                controller: TextEditingController(),
+                                controller: controller.seatsController,
                                 hintText: "Masukkan Jumlah Seats",
                                 labelText: "Jumlah Seats",
                                 isRequired: true,
@@ -207,14 +212,15 @@ class FormCarView extends GetView<FormCarController> {
                                 keyboardType: TextInputType.number,
                               ),
                               FormInputField(
-                                controller: TextEditingController(),
+                                controller: controller.transmissionController,
                                 hintText: "Masukkan Transmisi Mobil",
                                 labelText: "Transmisi Mobil",
                                 isRequired: true,
                                 textInputAction: TextInputAction.next,
                               ),
                               FormInputField(
-                                controller: TextEditingController(),
+                                isRequired: true,
+                                controller: controller.typeFuelController,
                                 hintText: "Masukkan Jenis Bensin",
                                 labelText: "Jenis Bensin",
                                 textInputAction: TextInputAction.next,
@@ -252,7 +258,7 @@ class FormCarView extends GetView<FormCarController> {
                                 height: 16,
                               ),
                               FormInputField(
-                                controller: TextEditingController(),
+                                controller: controller.priceController,
                                 hintText: "Masukkan Harga Sewa / Hari",
                                 labelText: "Harga Sewa / Hari",
                                 isRequired: true,
@@ -278,7 +284,7 @@ class FormCarView extends GetView<FormCarController> {
                                 borderRadius: BorderRadius.circular(12.0),
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () => controller.onSubmit(),
                             child: const Text("Simpan"),
                           ),
                         ),

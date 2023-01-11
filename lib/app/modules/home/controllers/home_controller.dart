@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
+import 'package:icp_gahara_mobile/app/modules/dashboard/controllers/dashboard_controller.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
+  // CONTROLLER
+  final DashboardController dashboardController = Get.find();
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -18,6 +19,4 @@ class HomeController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 }

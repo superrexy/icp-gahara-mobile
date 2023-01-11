@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:icp_gahara_mobile/app/common/values/app_constants.dart';
+import 'package:icp_gahara_mobile/app/model/response/order_response.dart';
 import 'package:icp_gahara_mobile/app/routes/app_pages.dart';
 
+import '../common/utils/extensions.dart';
 import '../common/values/app_colors.dart';
-import '../common/values/app_images.dart';
 import '../common/values/app_texts.dart';
 
 class OrderCard extends StatelessWidget {
   const OrderCard({
     Key? key,
+    required this.data,
+    this.onConfirm,
+    this.isAdmin = false,
   }) : super(key: key);
+  final OrdersDataResponse data;
+  final Function()? onConfirm;
+  final bool isAdmin;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.toNamed(Routes.DETAIL_ORDER),
+      onTap: () => Get.toNamed(
+        Routes.DETAIL_ORDER,
+        arguments: {"orderId": data.id},
+      ),
       child: Container(
         width: Get.width,
         padding: const EdgeInsets.symmetric(
@@ -44,13 +55,13 @@ class OrderCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Nola Riska",
+                      data.nameRent!,
                       style: AppTexts.primaryPBold.copyWith(
                         color: Colors.black,
                       ),
                     ),
                     Text(
-                      "Kode Pemesanan : 123456789",
+                      "Kode Pemesanan : ${data.id}",
                       style: AppTexts.primaryPRegular.copyWith(
                         fontSize: 14,
                         color: AppColors.secondaryColor.shade800,
@@ -64,14 +75,14 @@ class OrderCard extends StatelessWidget {
                     horizontal: 8.0,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.green,
+                    color: data.status == "ACTIVE" ? Colors.green : Colors.grey,
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   child: Text(
-                    "Selesai",
+                    data.status == "ACTIVE" ? "Aktif" : "Selesai",
                     style: AppTexts.primaryPBold.copyWith(
                       fontSize: 14,
-                      color: AppColors.primaryColor,
+                      color: Colors.white,
                     ),
                   ),
                 )
@@ -81,7 +92,7 @@ class OrderCard extends StatelessWidget {
               height: 6,
             ),
             Text(
-              "23 Feb 2023, 01:00 PM",
+              data.createdAt!.formatDateToString("dd MMM yyyy, HH:mm"),
               style: AppTexts.primaryPRegular.copyWith(
                 fontSize: 14,
                 color: AppColors.secondaryColor.shade800,
@@ -95,8 +106,10 @@ class OrderCard extends StatelessWidget {
                   width: 100,
                   height: 100,
                   decoration: BoxDecoration(
-                    image: const DecorationImage(
-                      image: AssetImage(AppImages.imgCar2),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        AppConstants.baseURL + data.car!.image,
+                      ),
                     ),
                     borderRadius: BorderRadius.circular(16.0),
                     border: Border.fromBorderSide(
@@ -114,7 +127,7 @@ class OrderCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Porche 911",
+                      data.car!.name,
                       style: AppTexts.primaryPBold.copyWith(
                         fontSize: 18,
                       ),
@@ -130,7 +143,7 @@ class OrderCard extends StatelessWidget {
                           width: 6,
                         ),
                         Text(
-                          "25 Feb 2023, 02:00 AM",
+                          data.startDate.formatDateToString("dd MMM yyyy"),
                           style: AppTexts.primaryPBold,
                         )
                       ],
@@ -146,7 +159,7 @@ class OrderCard extends StatelessWidget {
                           width: 6,
                         ),
                         Text(
-                          "26 Feb 2023, 02:00 AM",
+                          data.endDate.formatDateToString("dd MMM yyyy"),
                           style: AppTexts.primaryPBold,
                         )
                       ],
@@ -154,6 +167,45 @@ class OrderCard extends StatelessWidget {
                   ],
                 )
               ],
+            ),
+            const SizedBox(
+              height: 6,
+            ),
+            Visibility(
+              visible: data.status == "ACTIVE" && isAdmin,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellow,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                    ),
+                    onPressed: () {
+                      Get.defaultDialog(
+                        title: "Selesaikan Pesanan ?",
+                        middleText:
+                            "Apakah anda yakin ingin menyelesaikan pesanan ini & pastikan mobil sudah dikembalikan ?",
+                        textConfirm: "Ya",
+                        textCancel: "Tidak",
+                        confirmTextColor: Colors.white,
+                        cancelTextColor: Colors.black,
+                        buttonColor: Colors.green,
+                        onConfirm: onConfirm,
+                        onCancel: () {
+                          Get.closeAllSnackbars();
+                        },
+                      );
+                    },
+                    child: Text(
+                      "Selesaikan Pesanan",
+                      style: AppTexts.primaryPRegular,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
