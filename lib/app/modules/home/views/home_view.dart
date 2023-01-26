@@ -1,5 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
@@ -42,8 +44,8 @@ class HomeView extends GetView<HomeController> {
               children: [
                 Text("Gahara Rent Car", style: AppTexts.primaryPBold),
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: 40.w,
+                  height: 35.h,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(100)),
@@ -74,12 +76,12 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
           Container(
-            constraints: const BoxConstraints(maxWidth: 100, maxHeight: 200),
+            constraints: BoxConstraints(maxWidth: 100.w, maxHeight: 150.h),
             child: Image.asset(
               AppImages.imgLogo,
             ),
           ),
-          SizedBox(height: Get.height * 0.05),
+          SizedBox(height: 10.h),
           Column(
             children: [
               Row(
@@ -90,9 +92,10 @@ class HomeView extends GetView<HomeController> {
                       visible: controller.dashboardController.user.value.role !=
                           "admin",
                       child: Container(
-                        width: 120,
-                        height: 120,
+                        width: 100.w,
+                        height: 110.h,
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             GestureDetector(
                               onTap: () => Get.toNamed(Routes.RENT_CAR),
@@ -110,16 +113,23 @@ class HomeView extends GetView<HomeController> {
                                 ),
                               ),
                             ),
-                            Text("Sewa Mobil", style: AppTexts.primaryPRegular),
+                            FittedBox(
+                              child: AutoSizeText(
+                                "Sewa Mobil",
+                                style: AppTexts.primaryPRegular,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
                   Container(
-                    width: 120,
-                    height: 120,
+                    width: 100.w,
+                    height: 110.h,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         GestureDetector(
                           onTap: () => Get.toNamed(Routes.RENT_CAR, arguments: {
@@ -139,9 +149,12 @@ class HomeView extends GetView<HomeController> {
                             ),
                           ),
                         ),
-                        Text(
-                          "Informasi Mobil",
-                          style: AppTexts.primaryPRegular,
+                        FittedBox(
+                          child: AutoSizeText(
+                            "Informasi Mobil",
+                            style: AppTexts.primaryPRegular,
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ],
                     ),
@@ -154,9 +167,10 @@ class HomeView extends GetView<HomeController> {
                   GestureDetector(
                     onTap: () => Get.toNamed(Routes.ORDER),
                     child: Container(
-                      width: 120,
-                      height: 120,
+                      width: 100.w,
+                      height: 110.h,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
                             height: 80,
@@ -171,8 +185,13 @@ class HomeView extends GetView<HomeController> {
                               width: 40,
                             ),
                           ),
-                          Text("Daftar Pesanan",
-                              style: AppTexts.primaryPRegular),
+                          FittedBox(
+                            child: AutoSizeText(
+                              "Daftar Pesanan",
+                              textAlign: TextAlign.center,
+                              style: AppTexts.primaryPRegular,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -182,9 +201,10 @@ class HomeView extends GetView<HomeController> {
                       Get.toNamed(Routes.LOCATION);
                     },
                     child: Container(
-                      width: 120,
-                      height: 120,
+                      width: 100.w,
+                      height: 110.h,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
                             height: 80,
@@ -199,7 +219,13 @@ class HomeView extends GetView<HomeController> {
                               width: 40,
                             ),
                           ),
-                          Text("Lokasi", style: AppTexts.primaryPRegular),
+                          FittedBox(
+                            child: AutoSizeText(
+                              "Lokasi",
+                              style: AppTexts.primaryPRegular,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -208,11 +234,11 @@ class HomeView extends GetView<HomeController> {
               ),
             ],
           ),
-          SizedBox(height: Get.height * 0.05),
+          SizedBox(height: 25.h),
           Image.asset(
             AppImages.imgLogoTransparent,
             fit: BoxFit.cover,
-            height: Get.height * 0.23,
+            height: 140.h,
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'package:icp_gahara_mobile/app/common/values/app_texts.dart';
 import 'package:icp_gahara_mobile/app/modules/rent_car/controllers/detail_rent_car_controller.dart';
 import 'package:icp_gahara_mobile/app/routes/app_pages.dart';
 import 'package:icp_gahara_mobile/app/widgets/spesification_car_item.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../common/utils/extensions.dart';
 
@@ -221,10 +223,10 @@ class DetailRentCarView extends GetView<DetailRentCarController> {
                           SizedBox(
                             width: 130,
                             child: FittedBox(
-                              child: Text(
+                              child: AutoSizeText(
                                 controller.car.value.price.formatCurrencyIDR(),
                                 style: AppTexts.primaryPBold.copyWith(
-                                  fontSize: 18,
+                                  fontSize: 16.sp,
                                   color: Colors.black,
                                 ),
                                 maxLines: 1,
@@ -234,10 +236,10 @@ class DetailRentCarView extends GetView<DetailRentCarController> {
                             ),
                           ),
                           FittedBox(
-                            child: Text(
+                            child: AutoSizeText(
                               "/hari",
                               style: AppTexts.primaryPRegular.copyWith(
-                                fontSize: 16,
+                                fontSize: 14.sp,
                                 color: AppColors.secondaryColor.shade900,
                               ),
                               maxLines: 1,
@@ -259,10 +261,10 @@ class DetailRentCarView extends GetView<DetailRentCarController> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                        child: Text(
+                        child: AutoSizeText(
                           "Pesan Sekarang",
                           style: AppTexts.primaryPRegular
-                              .copyWith(color: Colors.white),
+                              .copyWith(color: Colors.white, fontSize: 14.sp),
                         ),
                       ),
                     ],

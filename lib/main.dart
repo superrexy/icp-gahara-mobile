@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -22,16 +23,21 @@ void main() {
   configLoading();
 
   runApp(
-    GetMaterialApp(
-      title: "ICP Gahara Rent Car",
-      initialRoute: AppPages.INITIAL,
-      getPages: AppPages.routes,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Outfit',
-      ),
-      defaultTransition: Transition.native,
-      builder: EasyLoading.init(),
+    ScreenUtilInit(
+      designSize: const Size(360, 690),
+      builder: ((context, child) {
+        return GetMaterialApp(
+          title: "ICP Gahara Rent Car",
+          initialRoute: AppPages.INITIAL,
+          getPages: AppPages.routes,
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            fontFamily: 'Outfit',
+          ),
+          defaultTransition: Transition.native,
+          builder: EasyLoading.init(),
+        );
+      }),
     ),
   );
 }
