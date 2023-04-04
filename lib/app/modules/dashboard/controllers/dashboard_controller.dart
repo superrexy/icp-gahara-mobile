@@ -18,11 +18,8 @@ class DashboardController extends GetxController {
           id: 0,
           fullName: '',
           noKtp: '',
-          address: '',
-          phone: '',
           email: '',
           role: '',
-          userImage: '',
           createdAt: DateTime.now(),
           updatedAt: DateTime.now())
       .obs;

@@ -22,7 +22,7 @@ class OrderController extends GetxController {
 
       if (response != null) {
         ordersActive.assignAll(
-            response.where((element) => element.status == "ACTIVE").toList());
+            response.where((element) => element.status != "INACTIVE").toList());
         ordersInactive.assignAll(
             response.where((element) => element.status == "INACTIVE").toList());
       } else {
@@ -36,16 +36,18 @@ class OrderController extends GetxController {
 
   Future<void> doneOrder(OrdersDataResponse data) async {
     try {
-      final response = await ordersProvider.doneOrderByID(data.id);
+      final response = await ordersProvider.doneOrderByID(data.id!);
 
       if (response) {
-        await getOrders();
         Get.back();
-        Get.snackbar(
-          'Berhasil',
-          'Berhasil Menyelesaikan Pesanan.',
-          backgroundColor: Colors.green,
-          colorText: Colors.white,
+
+        await getOrders().then(
+          (value) => Get.snackbar(
+            'Berhasil',
+            'Berhasil Menyelesaikan Pesanan.',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          ),
         );
       }
     } catch (e) {

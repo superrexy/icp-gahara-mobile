@@ -21,6 +21,8 @@ abstract class Routes {
   static const ORDER = _Paths.ORDER;
   static const DETAIL_ORDER = _Paths.DETAIL_ORDER;
   static const ONBOARDING = _Paths.ONBOARDING;
+  static const CHOOSE_PAYMENT = _Paths.CHOOSE_PAYMENT;
+  static const DETAIL_PAYMENT = _Paths.DETAIL_PAYMENT;
 }
 
 abstract class _Paths {
@@ -43,4 +45,6 @@ abstract class _Paths {
   static const ORDER = '/order';
   static const DETAIL_ORDER = '/order/detail';
   static const ONBOARDING = '/onboarding';
+  static const CHOOSE_PAYMENT = '/order/choose-payment';
+  static const DETAIL_PAYMENT = '/order/detail-payment';
 }

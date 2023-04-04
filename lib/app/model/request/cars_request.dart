@@ -11,41 +11,62 @@ class CarsRequest {
     required this.name,
     required this.description,
     required this.typeCar,
-    required this.price,
+    required this.priceDay,
     required this.seats,
     required this.typeFuel,
     required this.transmision,
-    this.carImage,
+    this.images,
+    this.pricesHour,
   });
 
   String name;
   String description;
   String typeCar;
-  String price;
+  String priceDay;
   String seats;
   String typeFuel;
   String transmision;
-  File? carImage;
+  List<File>? images;
+  List<PricesHour>? pricesHour;
 
   factory CarsRequest.fromJson(Map<String, dynamic> json) => CarsRequest(
         name: json["name"],
         description: json["description"],
         typeCar: json["type_car"],
-        price: json["price"],
+        priceDay: json["price_day"],
         seats: json["seats"],
         typeFuel: json["type_fuel"],
         transmision: json["transmision"],
-        carImage: json["carImage"],
+        images: json["images"],
       );
 
   Map<String, dynamic> toJson() => {
         "name": name,
         "description": description,
         "type_car": typeCar,
-        "price": price,
+        "price_day": priceDay,
         "seats": seats,
         "type_fuel": typeFuel,
         "transmision": transmision,
-        "carImage": carImage,
+        "images": images,
+        "prices_hour": pricesHour,
+      };
+}
+
+class PricesHour {
+  final int? id;
+  final String name;
+  final String price;
+
+  PricesHour({
+    this.id,
+    required this.name,
+    required this.price,
+  });
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "price": price,
       };
 }

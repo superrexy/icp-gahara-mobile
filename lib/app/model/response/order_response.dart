@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final ordersResponse = ordersResponseFromJson(jsonString);
+
 import 'dart:convert';
 
 OrdersResponse ordersResponseFromJson(String str) =>
@@ -7,63 +11,77 @@ String ordersResponseToJson(OrdersResponse data) => json.encode(data.toJson());
 
 class OrdersResponse {
   OrdersResponse({
-    required this.status,
-    required this.message,
-    required this.data,
+    this.status,
+    this.message,
+    this.data,
   });
 
-  bool status;
-  String message;
-  List<OrdersDataResponse> data;
+  bool? status;
+  String? message;
+  List<OrdersDataResponse>? data;
 
   factory OrdersResponse.fromJson(Map<String, dynamic> json) => OrdersResponse(
         status: json["status"],
         message: json["message"],
-        data: List<OrdersDataResponse>.from(
-            json["data"].map((x) => OrdersDataResponse.fromJson(x))),
+        data: json["data"] == null
+            ? []
+            : List<OrdersDataResponse>.from(
+                json["data"]!.map((x) => OrdersDataResponse.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 
 class OrdersDataResponse {
   OrdersDataResponse({
-    required this.id,
-    required this.nameRent,
-    required this.noKtp,
-    required this.address,
-    required this.phone,
-    required this.rentalPurposes,
-    required this.startDate,
-    required this.endDate,
-    required this.totalPrice,
-    required this.status,
-    required this.carId,
-    required this.userId,
+    this.id,
+    this.nameRent,
+    this.noKtp,
+    this.address,
+    this.phone,
+    this.rentalPurposes,
+    this.startDate,
+    this.endDate,
+    this.totalPrice,
+    this.status,
+    this.snapToken,
+    this.rentType,
+    this.carId,
+    this.rentHourId,
+    this.userId,
     this.createdAt,
     this.updatedAt,
-    required this.car,
+    this.midtrans,
+    this.rentHour,
+    this.car,
   });
 
-  int id;
-  String nameRent;
-  String noKtp;
-  String address;
-  String phone;
-  String rentalPurposes;
-  DateTime startDate;
-  DateTime endDate;
-  int totalPrice;
-  String status;
-  int carId;
-  int userId;
+  int? id;
+  String? nameRent;
+  String? noKtp;
+  String? address;
+  String? phone;
+  String? rentalPurposes;
+  DateTime? startDate;
+  DateTime? endDate;
+  int? totalPrice;
+  String? status;
+  dynamic snapToken;
+  String? rentType;
+  int? carId;
+  int? rentHourId;
+  int? userId;
   DateTime? createdAt;
   DateTime? updatedAt;
-  Car car;
+  Midtrans? midtrans;
+  RentHour? rentHour;
+  Car? car;
 
   factory OrdersDataResponse.fromJson(Map<String, dynamic> json) =>
       OrdersDataResponse(
@@ -73,15 +91,31 @@ class OrdersDataResponse {
         address: json["address"],
         phone: json["phone"],
         rentalPurposes: json["rental_purposes"],
-        startDate: DateTime.parse(json["start_date"]),
-        endDate: DateTime.parse(json["end_date"]),
+        startDate: json["start_date"] == null
+            ? null
+            : DateTime.parse(json["start_date"]),
+        endDate:
+            json["end_date"] == null ? null : DateTime.parse(json["end_date"]),
         totalPrice: json["total_price"],
         status: json["status"],
+        snapToken: json["snap_token"],
+        rentType: json["rent_type"],
         carId: json["car_id"],
+        rentHourId: json["rent_hour_id"],
         userId: json["user_id"],
-        createdAt: DateTime.parse(json["created_at"]),
-        updatedAt: DateTime.parse(json["updated_at"]),
-        car: Car.fromJson(json["car"]),
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        midtrans: json["midtrans"] == null
+            ? null
+            : Midtrans.fromJson(json["midtrans"]),
+        rentHour: json["rent_hour"] == null
+            ? null
+            : RentHour.fromJson(json["rent_hour"]),
+        car: json["car"] == null ? null : Car.fromJson(json["car"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -91,15 +125,20 @@ class OrdersDataResponse {
         "address": address,
         "phone": phone,
         "rental_purposes": rentalPurposes,
-        "start_date": startDate.toIso8601String(),
-        "end_date": endDate.toIso8601String(),
+        "start_date": startDate,
+        "end_date": endDate,
         "total_price": totalPrice,
         "status": status,
+        "snap_token": snapToken,
+        "rent_type": rentType,
         "car_id": carId,
+        "rent_hour_id": rentHourId,
         "user_id": userId,
-        "created_at": createdAt!.toIso8601String(),
-        "updated_at": updatedAt!.toIso8601String(),
-        "car": car.toJson(),
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "midtrans": midtrans?.toJson(),
+        "rent_hour": rentHour?.toJson(),
+        "car": car?.toJson(),
       };
 }
 
@@ -108,7 +147,6 @@ class Car {
     required this.id,
     required this.name,
     required this.description,
-    required this.price,
     required this.seats,
     required this.image,
     required this.typeFuel,
@@ -121,7 +159,6 @@ class Car {
   int id;
   String name;
   String description;
-  int price;
   int seats;
   String image;
   String typeFuel;
@@ -134,7 +171,6 @@ class Car {
         id: json["id"],
         name: json["name"],
         description: json["description"],
-        price: json["price"],
         seats: json["seats"],
         image: json["image"],
         typeFuel: json["type_fuel"],
@@ -148,7 +184,6 @@ class Car {
         "id": id,
         "name": name,
         "description": description,
-        "price": price,
         "seats": seats,
         "image": image,
         "type_fuel": typeFuel,
@@ -156,5 +191,65 @@ class Car {
         "transmision": transmision,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
+      };
+}
+
+class Midtrans {
+  Midtrans({
+    this.bank,
+    this.vaNumber,
+    this.actionUrl,
+  });
+
+  String? bank;
+  String? vaNumber;
+  dynamic actionUrl;
+
+  factory Midtrans.fromJson(Map<String, dynamic> json) => Midtrans(
+        bank: json["bank"],
+        vaNumber: json["va_number"],
+        actionUrl: json["action_url"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "bank": bank,
+        "va_number": vaNumber,
+        "action_url": actionUrl,
+      };
+}
+
+class RentHour {
+  RentHour({
+    required this.id,
+    required this.name,
+    required this.price,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.carId,
+  });
+
+  int id;
+  String name;
+  int price;
+  DateTime createdAt;
+  DateTime updatedAt;
+  int carId;
+
+  factory RentHour.fromJson(Map<String, dynamic> json) => RentHour(
+        id: json["id"],
+        name: json["name"],
+        price: json["price"],
+        createdAt: DateTime.parse(json["created_at"]),
+        updatedAt: DateTime.parse(json["updated_at"]),
+        carId: json["car_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "price": price,
+        "created_at": createdAt.toIso8601String(),
+        "updated_at": updatedAt.toIso8601String(),
+        "car_id": carId,
       };
 }

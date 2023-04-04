@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 
 import 'package:get/get.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_constants.dart';
@@ -25,174 +26,187 @@ class DetailRentCarView extends GetView<DetailRentCarController> {
 
     return Scaffold(
       backgroundColor: AppColors.bgColor,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              width: Get.width,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 5,
-                    spreadRadius: 1,
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        icon: const Icon(Icons.arrow_back_ios),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                width: Get.width,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 5,
+                      spreadRadius: 1,
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: const Icon(Icons.arrow_back_ios),
+                        ),
                       ),
                     ),
-                  ),
-                  const Expanded(
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(""),
-                    ),
-                  ),
-                  const Expanded(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: SizedBox(
-                        width: 18,
+                    const Flexible(
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(""),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 16,
-            ),
-            Obx(
-              () => Visibility(
-                visible: controller.car.value.id != 0,
-                child: Container(
-                  constraints: const BoxConstraints(
-                    maxHeight: 400,
-                  ),
-                  child: Image.network(
-                    AppConstants.baseURL + controller.car.value.image,
-                    fit: BoxFit.cover,
-                  ),
+                    const Flexible(
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: SizedBox(
+                          width: 18,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Obx(
-              () => Visibility(
-                visible: controller.car.value.id != 0,
-                child: Expanded(
+              Obx(
+                () => Visibility(
+                  visible: controller.car.value.id != null,
+                  child: controller.car.value.carImages != null
+                      ? ImageSlideshow(
+                          autoPlayInterval: 3000,
+                          isLoop: true,
+                          children: controller.car.value.carImages!
+                              .map((e) => Image.network(
+                                    AppConstants.baseURL + e.image!,
+                                    fit: BoxFit.cover,
+                                  ))
+                              .toList(),
+                        )
+                      : const CircularProgressIndicator(),
+                ),
+              ),
+              Obx(
+                () => Visibility(
+                  visible: controller.car.value.id != null,
                   child: Container(
                     width: Get.width,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 24),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                     decoration: const BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(32),
-                        topRight: Radius.circular(32),
-                      ),
                     ),
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: Obx(
-                        () {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                controller.car.value.name,
-                                style: AppTexts.primaryPBold.copyWith(
-                                  fontSize: 18,
-                                  color: AppColors.secondaryColor.shade900,
+                    child: Obx(
+                      () {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              controller.car.value.name ?? "",
+                              style: AppTexts.primaryPBold.copyWith(
+                                fontSize: 18,
+                                color: AppColors.secondaryColor.shade900,
+                              ),
+                            ),
+                            Text(
+                              "Tipe ${controller.car.value.typeCar ?? ""}",
+                              style: AppTexts.primaryPRegular.copyWith(
+                                fontSize: 14,
+                                color: AppColors.secondaryColor.shade700,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              "RINGKASAN",
+                              style: AppTexts.primaryPBold.copyWith(
+                                color: Colors.black,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            ReadMoreText(
+                              controller.car.value.description ?? "",
+                              moreStyle: AppTexts.primaryPBold.copyWith(
+                                fontSize: 14,
+                              ),
+                              lessStyle: AppTexts.primaryPBold.copyWith(
+                                fontSize: 14,
+                              ),
+                              style: AppTexts.primaryPRegular.copyWith(
+                                fontSize: 14,
+                                color: AppColors.secondaryColor.shade900,
+                              ),
+                              textAlign: TextAlign.justify,
+                              trimCollapsedText: ' Selengkapnya',
+                              trimExpandedText: ' Sembunyikan',
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Text(
+                              "SPESIFIKASI",
+                              style: AppTexts.primaryPBold.copyWith(
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 12.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                SpesificationCarItem(
+                                  title:
+                                      '${controller.car.value.seats ?? 0} Seats',
+                                  imagePath: AppImages.icSeat,
                                 ),
-                              ),
-                              Text(
-                                "Tipe ${controller.car.value.typeCar}",
-                                style: AppTexts.primaryPRegular.copyWith(
-                                  fontSize: 14,
-                                  color: AppColors.secondaryColor.shade700,
+                                SpesificationCarItem(
+                                  title: controller.car.value.transmision ?? "",
+                                  imagePath: AppImages.icTransmission,
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Text(
-                                "RINGKASAN",
-                                style: AppTexts.primaryPBold.copyWith(
-                                  color: Colors.black,
+                                SpesificationCarItem(
+                                  title: controller.car.value.typeFuel ?? "",
+                                  imagePath: AppImages.icFuel,
                                 ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 12.h,
+                            ),
+                            Text(
+                              "Harga Sewa",
+                              style: AppTexts.primaryPBold.copyWith(
+                                color: Colors.black,
                               ),
-                              const SizedBox(
-                                height: 6,
-                              ),
-                              ReadMoreText(
-                                controller.car.value.description,
-                                moreStyle: AppTexts.primaryPBold.copyWith(
-                                  fontSize: 14,
-                                ),
-                                lessStyle: AppTexts.primaryPBold.copyWith(
-                                  fontSize: 14,
-                                ),
-                                style: AppTexts.primaryPRegular.copyWith(
-                                  fontSize: 14,
-                                  color: AppColors.secondaryColor.shade900,
-                                ),
-                                textAlign: TextAlign.justify,
-                                trimCollapsedText: ' Selengkapnya',
-                                trimExpandedText: ' Sembunyikan',
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Text(
-                                "SPESIFIKASI",
-                                style: AppTexts.primaryPBold.copyWith(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  SpesificationCarItem(
-                                    title:
-                                        '${controller.car.value.seats} Seats',
-                                    imagePath: AppImages.icSeat,
-                                  ),
-                                  SpesificationCarItem(
-                                    title: controller.car.value.transmision,
-                                    imagePath: AppImages.icTransmission,
-                                  ),
-                                  SpesificationCarItem(
-                                    title: controller.car.value.typeFuel,
-                                    imagePath: AppImages.icFuel,
-                                  ),
-                                ],
-                              )
-                            ],
-                          );
-                        },
-                      ),
+                            ),
+                            SizedBox(
+                              height: 4.h,
+                            ),
+                            Text(
+                              "Harga Harian ${controller.car.value.priceDay!.formatCurrencyIDR()}",
+                            ),
+                            Text(controller.car.value.pricesHour != null
+                                ? "Harga Per Jam Mulai ${controller.car.value.pricesHour!.formatCurrencyIDR()}"
+                                : ""),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: isInfo == false && isMenuAdmin == false
@@ -216,45 +230,92 @@ class DetailRentCarView extends GetView<DetailRentCarController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                child: Obx(
+                                  () => AutoSizeText(
+                                    controller.car.value.carDayPrice != null
+                                        ? controller
+                                            .car.value.carDayPrice!.price!
+                                            .formatCurrencyIDR()
+                                        : "",
+                                    style: AppTexts.primaryPBold.copyWith(
+                                      fontSize: 16.sp,
+                                      color: Colors.black,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ),
+                              FittedBox(
+                                child: AutoSizeText(
+                                  " / hari",
+                                  style: AppTexts.primaryPRegular.copyWith(
+                                    fontSize: 14.sp,
+                                    color: AppColors.secondaryColor.shade900,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                          ),
                           SizedBox(
-                            width: 130,
-                            child: FittedBox(
-                              child: AutoSizeText(
-                                controller.car.value.price.formatCurrencyIDR(),
-                                style: AppTexts.primaryPBold.copyWith(
-                                  fontSize: 16.sp,
-                                  color: Colors.black,
+                            height: 5.h,
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                child: Obx(
+                                  () => AutoSizeText(
+                                    controller.car.value.pricesHour != null
+                                        ? controller.car.value.pricesHour!
+                                            .formatCurrencyIDR()
+                                        : "",
+                                    style: AppTexts.primaryPBold.copyWith(
+                                      fontSize: 16.sp,
+                                      color: Colors.black,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.right,
+                                  ),
+                                ),
+                              ),
+                              AutoSizeText(
+                                " / jam",
+                                style: AppTexts.primaryPRegular.copyWith(
+                                  fontSize: 14.sp,
+                                  color: AppColors.secondaryColor.shade900,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.right,
                               ),
-                            ),
-                          ),
-                          FittedBox(
-                            child: AutoSizeText(
-                              "/hari",
-                              style: AppTexts.primaryPRegular.copyWith(
-                                fontSize: 14.sp,
-                                color: AppColors.secondaryColor.shade900,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            ],
                           ),
                         ],
                       ),
                       ElevatedButton(
-                        onPressed: () => Get.toNamed(
-                          Routes.FORM_RENT_CAR,
-                          arguments: {
-                            "carId": controller.car.value.id,
-                          },
-                        ),
+                        onPressed: () {
+                          Get.toNamed(
+                            Routes.FORM_RENT_CAR,
+                            arguments: {
+                              "carId": controller.car.value.id,
+                              "hourPrices": controller.car.value.carHourPrice,
+                            },
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryColor.shade700,
                           shape: RoundedRectangleBorder(

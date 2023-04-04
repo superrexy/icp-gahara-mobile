@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:icp_gahara_mobile/app/data/api_client.dart';
 import 'package:icp_gahara_mobile/app/model/request/order_request.dart';
+import 'package:icp_gahara_mobile/app/model/response/order_payment_response.dart';
 import 'package:icp_gahara_mobile/app/model/response/order_response.dart';
 
 class OrdersProvider {
@@ -50,16 +51,16 @@ class OrdersProvider {
     }
   }
 
-  Future<bool> createOrder(OrdersRequest request) async {
+  Future<OrdersDataResponse?> createOrder(OrdersRequest request) async {
     try {
       final Response response =
           await _client.post("/orders/create", data: request.toJson());
 
       if (response.statusCode == 201) {
-        return true;
+        return OrdersDataResponse.fromJson(response.data['data']);
       }
 
-      return false;
+      return null;
     } on DioError catch (e) {
       throw e.response?.data['message'];
     }
@@ -89,6 +90,20 @@ class OrdersProvider {
       }
 
       return false;
+    } on DioError catch (e) {
+      throw e.response?.data['message'];
+    }
+  }
+
+  Future<OrderPaymentDataResponse?> orderPayment(int orderId) async {
+    try {
+      final Response response = await _client.get("/orders/$orderId/payment");
+
+      if (response.statusCode == 200) {
+        return OrderPaymentDataResponse.fromJson(response.data['data']);
+      }
+
+      return null;
     } on DioError catch (e) {
       throw e.response?.data['message'];
     }

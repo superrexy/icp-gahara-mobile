@@ -93,21 +93,24 @@ class CarRentCard extends StatelessWidget {
             Container(
               constraints: BoxConstraints(maxHeight: 160.h),
               child: Image.network(
-                AppConstants.baseURL + data.image,
+                AppConstants.baseURL + data.image!,
                 fit: BoxFit.cover,
                 width: 280.w,
               ),
             ),
+            SizedBox(
+              height: 15.h,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AutoSizeText(
-                        data.name,
+                        data.name!,
                         style: AppTexts.primaryPBold
                             .copyWith(fontSize: 16.sp, color: Colors.black),
                       ),
@@ -124,31 +127,72 @@ class CarRentCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      SizedBox(
-                        width: 130,
-                        child: FittedBox(
-                          child: AutoSizeText(
-                            data.price.formatCurrencyIDR(),
-                            style: AppTexts.primaryPBold.copyWith(
-                              fontSize: 14.sp,
-                              color: Colors.black,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.right,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              FittedBox(
+                                child: AutoSizeText(
+                                  data.priceDay!.formatCurrencyIDR(),
+                                  style: AppTexts.primaryPBold.copyWith(
+                                    fontSize: 14.sp,
+                                    color: Colors.black,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.right,
+                                ),
+                              ),
+                              FittedBox(
+                                child: AutoSizeText(
+                                  " / hari",
+                                  style: AppTexts.primaryPRegular.copyWith(
+                                    fontSize: 14.sp,
+                                    color: AppColors.secondaryColor.shade900,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                      FittedBox(
-                        child: AutoSizeText(
-                          "/hari",
-                          style: AppTexts.primaryPRegular.copyWith(
-                            fontSize: 14.sp,
-                            color: AppColors.secondaryColor.shade900,
+                          SizedBox(
+                            height: 4.h,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+                          data.pricesHour != null
+                              ? Row(
+                                  children: [
+                                    FittedBox(
+                                      child: AutoSizeText(
+                                        data.pricesHour!.formatCurrencyIDR(),
+                                        style: AppTexts.primaryPBold.copyWith(
+                                          fontSize: 14.sp,
+                                          color: Colors.black,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.right,
+                                      ),
+                                    ),
+                                    FittedBox(
+                                      child: AutoSizeText(
+                                        " / jam",
+                                        style:
+                                            AppTexts.primaryPRegular.copyWith(
+                                          fontSize: 14.sp,
+                                          color:
+                                              AppColors.secondaryColor.shade900,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container(),
+                        ],
                       ),
                     ],
                   ),

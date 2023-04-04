@@ -88,7 +88,7 @@ class RentCarView extends GetView<RentCarController> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Obx(
                     () => controller.cars.isEmpty
-                        ? Container(
+                        ? SizedBox(
                             height: Get.height * 0.8,
                             child: Center(
                               child: Text(
@@ -105,7 +105,7 @@ class RentCarView extends GetView<RentCarController> {
                                     isInfo: isInfo,
                                     data: element,
                                     onDelete: () =>
-                                        controller.deleteCar(element.id),
+                                        controller.deleteCar(element.id!),
                                   ),
                                 )
                                 .toList(),

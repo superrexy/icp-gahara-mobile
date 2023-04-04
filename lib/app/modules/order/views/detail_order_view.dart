@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:icp_gahara_mobile/app/common/utils/extensions.dart';
 import 'package:icp_gahara_mobile/app/common/utils/helpers.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_constants.dart';
 import 'package:icp_gahara_mobile/app/modules/order/controllers/detail_order_controller.dart';
+import 'package:icp_gahara_mobile/app/routes/app_pages.dart';
 
 import '../../../common/values/app_colors.dart';
 import '../../../common/values/app_texts.dart';
@@ -174,7 +176,15 @@ class DetailOrderView extends GetView<DetailOrderController> {
                                               controller.order.value.status ==
                                                       "ACTIVE"
                                                   ? "Aktif"
-                                                  : "Selesai",
+                                                  : controller.order.value
+                                                              .status ==
+                                                          "NOTPAID"
+                                                      ? "Belum Dibayar"
+                                                      : controller.order.value
+                                                                  .status ==
+                                                              "EXPIRED"
+                                                          ? "Kadaluarsa"
+                                                          : "Selesai",
                                               style: AppTexts.primaryPBold
                                                   .copyWith(
                                                 fontSize: 14,
@@ -187,6 +197,7 @@ class DetailOrderView extends GetView<DetailOrderController> {
                                       Text(
                                         controller.order.value.createdAt != null
                                             ? controller.order.value.createdAt!
+                                                .toLocal()
                                                 .formatDateToString(
                                                     "dd MMM yyyy, HH:mm")
                                             : "-",
@@ -202,27 +213,35 @@ class DetailOrderView extends GetView<DetailOrderController> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Container(
-                                            width: 100,
-                                            height: 100,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                image: NetworkImage(
-                                                    AppConstants.baseURL +
-                                                        controller.order.value
-                                                            .car.image),
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(16.0),
-                                              border: Border.fromBorderSide(
-                                                BorderSide(
-                                                  width: 1,
-                                                  color: Colors.grey
-                                                      .withOpacity(0.4),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
+                                          controller.order.value.car?.image !=
+                                                  null
+                                              ? Container(
+                                                  width: 100,
+                                                  height: 100,
+                                                  decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                      image: NetworkImage(
+                                                          AppConstants.baseURL +
+                                                              controller
+                                                                  .order
+                                                                  .value
+                                                                  .car!
+                                                                  .image),
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16.0),
+                                                    border:
+                                                        Border.fromBorderSide(
+                                                      BorderSide(
+                                                        width: 1,
+                                                        color: Colors.grey
+                                                            .withOpacity(0.4),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : const CircularProgressIndicator(),
                                           const SizedBox(
                                             width: 6,
                                           ),
@@ -231,13 +250,16 @@ class DetailOrderView extends GetView<DetailOrderController> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                controller
-                                                        .order.value.car.name ??
+                                                controller.order.value.car
+                                                        ?.name ??
                                                     "-",
                                                 style: AppTexts.primaryPBold
                                                     .copyWith(
                                                   fontSize: 18,
                                                 ),
+                                              ),
+                                              SizedBox(
+                                                height: 6.h,
                                               ),
                                               Column(
                                                 crossAxisAlignment:
@@ -263,57 +285,102 @@ class DetailOrderView extends GetView<DetailOrderController> {
                                               const SizedBox(
                                                 height: 6,
                                               ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Tanggal Sewa",
-                                                    style: AppTexts
-                                                        .primaryPRegular,
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 6,
-                                                  ),
-                                                  Text(
-                                                    controller.order.value
-                                                                .startDate !=
-                                                            null
-                                                        ? controller.order.value
-                                                            .startDate!
-                                                            .formatDateToString(
-                                                                "dd MMM yyyy, HH:mm")
-                                                        : "-",
-                                                    style:
-                                                        AppTexts.primaryPBold,
-                                                  )
-                                                ],
+                                              Visibility(
+                                                visible: controller.order.value
+                                                        .rentHourId !=
+                                                    null,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Jam Sewa",
+                                                      style: AppTexts
+                                                          .primaryPRegular,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 6,
+                                                    ),
+                                                    Text(
+                                                      controller.order.value
+                                                              .rentHour?.name ??
+                                                          "-",
+                                                      style:
+                                                          AppTexts.primaryPBold,
+                                                    )
+                                                  ],
+                                                ),
                                               ),
-                                              Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    "Tanggal Kembali",
-                                                    style: AppTexts
-                                                        .primaryPRegular,
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 6,
-                                                  ),
-                                                  Text(
-                                                    controller.order.value
-                                                                .endDate !=
-                                                            null
-                                                        ? controller.order.value
-                                                            .endDate!
-                                                            .formatDateToString(
-                                                                "dd MMM yyyy, HH:mm")
-                                                        : "-",
-                                                    style:
-                                                        AppTexts.primaryPBold,
-                                                  )
-                                                ],
+                                              Visibility(
+                                                visible: controller.order.value
+                                                        .rentHourId ==
+                                                    null,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "Tanggal Sewa",
+                                                          style: AppTexts
+                                                              .primaryPRegular,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 6,
+                                                        ),
+                                                        Text(
+                                                          controller.order.value
+                                                                      .startDate !=
+                                                                  null
+                                                              ? controller
+                                                                  .order
+                                                                  .value
+                                                                  .startDate!
+                                                                  .toLocal()
+                                                                  .formatDateToString(
+                                                                      "dd MMM yyyy, HH:mm")
+                                                              : "-",
+                                                          style: AppTexts
+                                                              .primaryPBold,
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          "Tanggal Kembali",
+                                                          style: AppTexts
+                                                              .primaryPRegular,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 6,
+                                                        ),
+                                                        Text(
+                                                          controller.order.value
+                                                                      .endDate !=
+                                                                  null
+                                                              ? controller
+                                                                  .order
+                                                                  .value
+                                                                  .endDate!
+                                                                  .toLocal()
+                                                                  .formatDateToString(
+                                                                      "dd MMM yyyy, HH:mm")
+                                                              : "-",
+                                                          style: AppTexts
+                                                              .primaryPBold,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ],
                                           )
@@ -364,27 +431,47 @@ class DetailOrderView extends GetView<DetailOrderController> {
                                                 fontSize: 18,
                                               ),
                                             ),
+                                            SizedBox(
+                                              height: 6.h,
+                                            ),
                                             Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text(
-                                                  "Sewa ${Helpers.countRangeDays(controller.order.value.startDate, controller.order.value.endDate)} Hari",
-                                                  style: AppTexts
-                                                      .primaryPRegular
-                                                      .copyWith(
-                                                    color: AppColors
-                                                        .secondaryColor
-                                                        .shade700,
-                                                  ),
-                                                ),
+                                                controller.order.value
+                                                            .rentHourId ==
+                                                        null
+                                                    ? Text(
+                                                        controller.order.value
+                                                                    .startDate ==
+                                                                null
+                                                            ? ""
+                                                            : "Sewa ${Helpers.countRangeDays(controller.order.value.startDate!.toLocal(), controller.order.value.endDate!.toLocal())} Hari",
+                                                        style: AppTexts
+                                                            .primaryPRegular
+                                                            .copyWith(
+                                                          color: AppColors
+                                                              .secondaryColor
+                                                              .shade700,
+                                                        ),
+                                                      )
+                                                    : Text(
+                                                        "Sewa ${controller.order.value.rentHour?.name}",
+                                                        style: AppTexts
+                                                            .primaryPRegular
+                                                            .copyWith(
+                                                          color: AppColors
+                                                              .secondaryColor
+                                                              .shade700,
+                                                        ),
+                                                      ),
                                                 Text(
                                                   controller.order.value
                                                               .totalPrice !=
                                                           null
                                                       ? controller.order.value
-                                                          .totalPrice
+                                                          .totalPrice!
                                                           .formatCurrencyIDR()
                                                       : "-",
                                                   style: AppTexts
@@ -457,7 +544,7 @@ class DetailOrderView extends GetView<DetailOrderController> {
                             Container(
                               width: Get.width,
                               padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 16),
+                                  horizontal: 16, vertical: 12),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(12.0),
@@ -510,6 +597,39 @@ class DetailOrderView extends GetView<DetailOrderController> {
                                     ],
                                   )
                                 ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 8.h,
+                            ),
+                            Visibility(
+                              visible:
+                                  controller.order.value.status == "NOTPAID" &&
+                                      controller.dashboardController.user.value
+                                              .role ==
+                                          "user",
+                              child: SizedBox(
+                                width: Get.width,
+                                child: OutlinedButton(
+                                  onPressed: () => Get.toNamed(
+                                    Routes.DETAIL_PAYMENT,
+                                    arguments: {
+                                      "orderId": controller.order.value.id,
+                                    },
+                                  ),
+                                  style: OutlinedButton.styleFrom(
+                                    side: const BorderSide(
+                                      color: Colors.green,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8).r,
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    "Cek Status Pembayaran",
+                                    style: TextStyle(color: Colors.green),
+                                  ),
+                                ),
                               ),
                             ),
                           ],

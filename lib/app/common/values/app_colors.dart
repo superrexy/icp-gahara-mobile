@@ -28,4 +28,6 @@ abstract class AppColors {
   });
 
   static Color bgColor = const Color(0xFFF2F5F7);
+
+  static Color mutedColor = const Color(0xFF6c757d);
 }

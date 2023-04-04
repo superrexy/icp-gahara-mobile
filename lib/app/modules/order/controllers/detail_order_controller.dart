@@ -1,38 +1,17 @@
 import 'package:get/get.dart';
 import 'package:icp_gahara_mobile/app/data/orders_provider.dart';
 import 'package:icp_gahara_mobile/app/model/response/order_response.dart';
+import 'package:icp_gahara_mobile/app/modules/dashboard/controllers/dashboard_controller.dart';
 
 class DetailOrderController extends GetxController {
+  // Controller
+  final DashboardController dashboardController = Get.find();
+
   // Provider
   final OrdersProvider ordersProvider = OrdersProvider();
 
   // Observable
-  final order = OrdersDataResponse(
-    address: '',
-    carId: 0,
-    endDate: DateTime.now(),
-    id: 0,
-    nameRent: '',
-    noKtp: '',
-    phone: '',
-    rentalPurposes: '',
-    startDate: DateTime.now(),
-    status: 'ACTIVE',
-    totalPrice: 0,
-    userId: 0,
-    car: Car(
-        id: 0,
-        name: '',
-        description: '',
-        price: 0,
-        seats: 0,
-        image: '',
-        typeFuel: '',
-        typeCar: '',
-        transmision: '',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now()),
-  ).obs;
+  final order = OrdersDataResponse().obs;
 
   // Function
   Future<void> getOrder() async {
@@ -57,6 +36,9 @@ class DetailOrderController extends GetxController {
           val.carId = response.carId;
           val.car = response.car;
           val.userId = response.userId;
+          val.rentHourId = response.rentHourId;
+          val.rentHour = response.rentHour;
+          val.car = response.car;
         });
       }
     } catch (e) {

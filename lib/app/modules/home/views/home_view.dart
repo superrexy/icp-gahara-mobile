@@ -234,11 +234,17 @@ class HomeView extends GetView<HomeController> {
               ),
             ],
           ),
-          SizedBox(height: 25.h),
-          Image.asset(
-            AppImages.imgLogoTransparent,
-            fit: BoxFit.cover,
-            height: 140.h,
+          Container(
+            margin: EdgeInsets.only(top: 26.0.h),
+            constraints: BoxConstraints(maxWidth: 100.w, maxHeight: 150.h),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage(
+                  AppImages.imgLogoTransparent,
+                ),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ],
       ),

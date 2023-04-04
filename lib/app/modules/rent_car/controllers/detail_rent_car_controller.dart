@@ -7,19 +7,7 @@ class DetailRentCarController extends GetxController {
   final CarsProvider carsProvider = CarsProvider();
 
   // Observable
-  final car = CarsDataResponse(
-    id: 0,
-    name: '',
-    image: '',
-    price: 0,
-    seats: 0,
-    description: '',
-    transmision: '',
-    typeCar: '',
-    typeFuel: '',
-    createdAt: DateTime.now(),
-    updatedAt: DateTime.now(),
-  ).obs;
+  final car = CarsDataResponse().obs;
 
   // Function
   Future<void> getCar() async {
@@ -31,7 +19,6 @@ class DetailRentCarController extends GetxController {
           val?.id = response.id;
           val?.name = response.name;
           val?.image = response.image;
-          val?.price = response.price;
           val?.seats = response.seats;
           val?.description = response.description;
           val?.transmision = response.transmision;
@@ -39,6 +26,11 @@ class DetailRentCarController extends GetxController {
           val?.typeFuel = response.typeFuel;
           val?.createdAt = response.createdAt;
           val?.updatedAt = response.updatedAt;
+          val?.priceDay = response.priceDay;
+          val?.pricesHour = response.pricesHour;
+          val?.carDayPrice = response.carDayPrice;
+          val?.carHourPrice = response.carHourPrice;
+          val?.carImages = response.carImages;
         });
       }
     } catch (e) {

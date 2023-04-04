@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_constants.dart';
 import 'package:icp_gahara_mobile/app/model/response/order_response.dart';
@@ -55,7 +56,7 @@ class OrderCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      data.nameRent!,
+                      data.nameRent ?? "",
                       style: AppTexts.primaryPBold.copyWith(
                         color: Colors.black,
                       ),
@@ -79,7 +80,13 @@ class OrderCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   child: Text(
-                    data.status == "ACTIVE" ? "Aktif" : "Selesai",
+                    data.status == "ACTIVE"
+                        ? "Aktif"
+                        : data.status == "NOTPAID"
+                            ? "Belum Dibayar"
+                            : data.status == "EXPIRED"
+                                ? "Kadaluarsa"
+                                : "Selesai",
                     style: AppTexts.primaryPBold.copyWith(
                       fontSize: 14,
                       color: Colors.white,
@@ -92,7 +99,9 @@ class OrderCard extends StatelessWidget {
               height: 6,
             ),
             Text(
-              data.createdAt!.formatDateToString("dd MMM yyyy, HH:mm"),
+              data.createdAt!
+                  .toLocal()
+                  .formatDateToString("dd MMM yyyy, HH:mm"),
               style: AppTexts.primaryPRegular.copyWith(
                 fontSize: 14,
                 color: AppColors.secondaryColor.shade800,
@@ -132,37 +141,75 @@ class OrderCard extends StatelessWidget {
                         fontSize: 18,
                       ),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Tanggal Sewa",
-                          style: AppTexts.primaryPRegular,
-                        ),
-                        const SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          data.startDate.formatDateToString("dd MMM yyyy"),
-                          style: AppTexts.primaryPBold,
-                        )
-                      ],
+                    SizedBox(
+                      height: 6.h,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Tanggal Kembali",
-                          style: AppTexts.primaryPRegular,
-                        ),
-                        const SizedBox(
-                          width: 6,
-                        ),
-                        Text(
-                          data.endDate.formatDateToString("dd MMM yyyy"),
-                          style: AppTexts.primaryPBold,
-                        )
-                      ],
+                    Visibility(
+                      visible: data.rentHourId != null,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Jam Sewa",
+                            style: AppTexts.primaryPRegular,
+                          ),
+                          const SizedBox(
+                            width: 6,
+                          ),
+                          Text(
+                            data.rentHour != null ? data.rentHour!.name : "",
+                            style: AppTexts.primaryPBold,
+                          )
+                        ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: data.rentHourId == null,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Tanggal Sewa",
+                                style: AppTexts.primaryPRegular,
+                              ),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              Text(
+                                data.startDate != null
+                                    ? data.startDate!
+                                        .toLocal()
+                                        .formatDateToString("dd MMM yyyy")
+                                    : "",
+                                style: AppTexts.primaryPBold,
+                              )
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Tanggal Kembali",
+                                style: AppTexts.primaryPRegular,
+                              ),
+                              const SizedBox(
+                                width: 6,
+                              ),
+                              Text(
+                                data.endDate != null
+                                    ? data.endDate!
+                                        .toLocal()
+                                        .formatDateToString("dd MMM yyyy")
+                                    : "",
+                                style: AppTexts.primaryPBold,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 )

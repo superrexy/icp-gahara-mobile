@@ -153,7 +153,9 @@ class FormDetailRentCarView extends GetView<FormRentCarController> {
                               TextFormItem(
                                 label: "Lama Sewa",
                                 isTextEditingController: false,
-                                text: "${controller.totalDays} Hari",
+                                text: controller.typeRent.value == "day"
+                                    ? "${controller.totalDays.value} Hari"
+                                    : controller.nameHourPrice.value,
                               ),
                               TextFormItem(
                                 label: "Total Harga",
@@ -170,7 +172,7 @@ class FormDetailRentCarView extends GetView<FormRentCarController> {
                         SizedBox(
                           width: Get.width,
                           child: ElevatedButton(
-                            onPressed: () => controller.onSubmit(),
+                            onPressed: () => Get.toNamed(Routes.CHOOSE_PAYMENT),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green,
                               padding: const EdgeInsets.symmetric(
@@ -179,7 +181,7 @@ class FormDetailRentCarView extends GetView<FormRentCarController> {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
-                            child: const Text("Sewa"),
+                            child: const Text("Pilih Pembayaran"),
                           ),
                         )
                       ],

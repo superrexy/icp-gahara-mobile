@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/utils.dart';
 
 import 'package:icp_gahara_mobile/app/common/values/app_colors.dart';
@@ -21,6 +22,7 @@ class FormInputField extends StatelessWidget {
     this.isTextArea = false,
     this.customValidation = false,
     this.customValidationFunction,
+    this.onChanged,
   });
   final String hintText;
   final String labelText;
@@ -38,6 +40,7 @@ class FormInputField extends StatelessWidget {
   final bool? isTextArea;
   final bool? customValidation;
   final Function(String?)? customValidationFunction;
+  final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +76,11 @@ class FormInputField extends StatelessWidget {
             onFieldSubmitted: onFieldSubmitted,
             maxLines: isTextArea! ? 3 : 1,
             autovalidateMode: AutovalidateMode.onUserInteraction,
+            onChanged: onChanged,
+            inputFormatters: [
+              if (keyboardType == TextInputType.number)
+                FilteringTextInputFormatter.digitsOnly,
+            ],
             validator: (value) {
               if (customValidation!) {
                 return customValidationFunction!(value);

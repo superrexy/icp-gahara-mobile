@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:icp_gahara_mobile/app/data/api_client.dart';
@@ -38,23 +41,30 @@ class CarsProvider {
 
   Future<bool> createCar(CarsRequest request) async {
     try {
-      final fileName = request.carImage!.path.split('/').last;
-      final extFile = fileName.split('.').last;
-
       final formData = FormData.fromMap({
         'name': request.name,
-        'price': request.price,
+        'price_day': request.priceDay,
         'description': request.description,
         'seats': request.seats,
         'type_fuel': request.typeFuel,
         'type_car': request.typeCar,
         'transmision': request.transmision,
-        'car_image': MultipartFile.fromBytes(
-          request.carImage!.readAsBytesSync(),
-          filename: fileName,
-          contentType: MediaType('image', extFile),
-        ),
+        'prices_hour': jsonEncode(request.pricesHour),
       });
+
+      for (File image in request.images!) {
+        final fileName = image.path.split('/').last;
+        final extFile = fileName.split('.').last;
+
+        formData.files.add(MapEntry(
+          'images',
+          MultipartFile.fromBytes(
+            image.readAsBytesSync(),
+            filename: fileName,
+            contentType: MediaType('image', extFile),
+          ),
+        ));
+      }
 
       final Response response =
           await _client.post("/cars/create", data: formData);
@@ -71,7 +81,7 @@ class CarsProvider {
 
   Future<bool> updateCar(int carId, CarsRequest request) async {
     try {
-      if (request.carImage == null) {
+      if (request.images == null) {
         final Response response =
             await _client.put("/cars/$carId/update", data: request.toJson());
 
@@ -82,23 +92,32 @@ class CarsProvider {
         return false;
       }
 
-      final fileName = request.carImage!.path.split('/').last;
-      final extFile = fileName.split('.').last;
-
       final formData = FormData.fromMap({
         'name': request.name,
-        'price': request.price,
+        'price_day': request.priceDay,
         'description': request.description,
         'seats': request.seats,
         'type_fuel': request.typeFuel,
         'type_car': request.typeCar,
         'transmision': request.transmision,
-        'car_image': MultipartFile.fromBytes(
-          request.carImage!.readAsBytesSync(),
-          filename: fileName,
-          contentType: MediaType('image', extFile),
-        ),
+        'prices_hour': jsonEncode(request.pricesHour),
       });
+
+      if (request.images != null) {
+        for (File image in request.images!) {
+          final fileName = image.path.split('/').last;
+          final extFile = fileName.split('.').last;
+
+          formData.files.add(MapEntry(
+            'images',
+            MultipartFile.fromBytes(
+              image.readAsBytesSync(),
+              filename: fileName,
+              contentType: MediaType('image', extFile),
+            ),
+          ));
+        }
+      }
 
       final Response response =
           await _client.put("/cars/$carId/update", data: formData);
@@ -116,6 +135,21 @@ class CarsProvider {
   Future<bool> deleteCar(int carId) async {
     try {
       final Response response = await _client.delete("/cars/$carId/delete");
+
+      if (response.statusCode == 200) {
+        return true;
+      }
+
+      return false;
+    } on DioError catch (e) {
+      throw e.response?.data['message'];
+    }
+  }
+
+  Future<bool> deleteCarImage(int carId, int imageId) async {
+    try {
+      final Response response =
+          await _client.delete("/cars/$carId/images/$imageId/delete");
 
       if (response.statusCode == 200) {
         return true;

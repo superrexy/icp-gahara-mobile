@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:icp_gahara_mobile/app/modules/rent_car/views/detail_payment_view.dart';
 
 import '../modules/authentication/login/bindings/login_binding.dart';
 import '../modules/authentication/login/views/login_view.dart';
@@ -22,6 +23,7 @@ import '../modules/rent_car/views/form_car_view.dart';
 import '../modules/rent_car/views/form_detail_rent_car_view.dart';
 import '../modules/rent_car/views/form_rent_car_view.dart';
 import '../modules/rent_car/views/rent_car_view.dart';
+import '../modules/rent_car/views/choose_payment_view.dart';
 import '../modules/settings/bindings/settings_binding.dart';
 import '../modules/settings/views/settings_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
@@ -83,7 +85,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.LOCATION,
-      page: () => LocationView(),
+      page: () => const LocationView(),
       binding: LocationBinding(),
     ),
     GetPage(
@@ -119,6 +121,16 @@ class AppPages {
       name: _Paths.DETAIL_ORDER,
       page: () => const DetailOrderView(),
       binding: OrderBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHOOSE_PAYMENT,
+      page: () => const ChoosePaymentView(),
+      binding: OrderBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETAIL_PAYMENT,
+      page: () => const DetailPaymentView(),
+      binding: RentCarBinding(),
     ),
   ];
 }

@@ -4,14 +4,26 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/utils.dart';
 import 'package:icp_gahara_mobile/app/common/storage/storage.dart';
 import 'package:icp_gahara_mobile/app/common/values/app_constants.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class ApiClient {
   static Dio init() {
     final dio = Dio();
     dio.options.baseUrl = AppConstants.baseAPIURL;
-    dio.options.connectTimeout = 5000;
-    dio.options.receiveTimeout = 3000;
+    dio.options.connectTimeout = const Duration(seconds: 10);
+    dio.options.receiveTimeout = const Duration(seconds: 10);
     dio.interceptors.add(ApiInterceptors());
+    dio.interceptors.add(
+      PrettyDioLogger(
+        requestHeader: true,
+        requestBody: true,
+        responseBody: true,
+        responseHeader: false,
+        error: true,
+        compact: true,
+        maxWidth: 90,
+      ),
+    );
     return dio;
   }
 }

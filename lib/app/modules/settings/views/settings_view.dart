@@ -69,26 +69,30 @@ class SettingsView extends GetView<SettingsController> {
                   Row(
                     children: [
                       Obx(
-                        () => Container(
-                          width: Get.height * 0.06,
-                          height: Get.height * 0.06,
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(100),
-                            image: DecorationImage(
-                              image: controller.dashboardController.user.value
-                                          .userImage !=
-                                      null
-                                  ? NetworkImage(AppConstants.baseURL +
-                                      controller.dashboardController.user.value
-                                          .userImage!)
-                                  : const AssetImage(AppImages.imgUser)
-                                      as ImageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
+                        () => controller
+                                    .dashboardController.user.value.userImage !=
+                                null
+                            ? Container(
+                                width: Get.height * 0.06,
+                                height: Get.height * 0.06,
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(100),
+                                  image: DecorationImage(
+                                    image: controller.dashboardController.user
+                                                .value.userImage !=
+                                            null
+                                        ? NetworkImage(AppConstants.baseURL +
+                                            controller.dashboardController.user
+                                                .value.userImage!)
+                                        : const AssetImage(AppImages.imgUser)
+                                            as ImageProvider,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              )
+                            : SizedBox(),
                       ),
                       SizedBox(
                         width: Get.width * 0.03,
