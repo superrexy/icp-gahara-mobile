@@ -17,7 +17,6 @@ class FormCarController extends GetxController {
 
   // FORM
   final formKey = GlobalKey<FormState>();
-  final int carId = Get.arguments?['carId'];
   final TextEditingController nameController = TextEditingController();
   final TextEditingController typeController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -79,20 +78,11 @@ class FormCarController extends GetxController {
   // Function
   Future<void> onSubmit() async {
     try {
-      print(priceHourController
-          .map(
-            (e) => PricesHour(
-              id: e.id,
-              name: e.name.text,
-              price: e.price.text,
-            ),
-          )
-          .toList(growable: true)
-          .toString());
       if (formKey.currentState!.validate()) {
         if (deleteImages.isNotEmpty) {
           for (var element in deleteImages) {
-            await carsProvider.deleteCarImage(carId, element.id!);
+            await carsProvider.deleteCarImage(
+                Get.arguments?['carId'], element.id!);
           }
         }
 
@@ -152,7 +142,7 @@ class FormCarController extends GetxController {
                     price: e.price.text,
                   ),
                 )
-                .toList(growable: true),
+                .toList(),
           );
 
           final response = await carsProvider.createCar(payload);

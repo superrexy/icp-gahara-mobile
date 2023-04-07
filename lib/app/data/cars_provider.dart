@@ -81,17 +81,6 @@ class CarsProvider {
 
   Future<bool> updateCar(int carId, CarsRequest request) async {
     try {
-      if (request.images == null) {
-        final Response response =
-            await _client.put("/cars/$carId/update", data: request.toJson());
-
-        if (response.statusCode == 200) {
-          return true;
-        }
-
-        return false;
-      }
-
       final formData = FormData.fromMap({
         'name': request.name,
         'price_day': request.priceDay,

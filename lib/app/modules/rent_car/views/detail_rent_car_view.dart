@@ -81,6 +81,7 @@ class DetailRentCarView extends GetView<DetailRentCarController> {
                       ? ImageSlideshow(
                           autoPlayInterval: 3000,
                           isLoop: true,
+                          height: 250.h,
                           children: controller.car.value.carImages!
                               .map((e) => Image.network(
                                     AppConstants.baseURL + e.image!,
