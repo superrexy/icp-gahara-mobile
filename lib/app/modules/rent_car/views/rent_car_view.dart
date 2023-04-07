@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -51,7 +52,7 @@ class RentCarView extends GetView<RentCarController> {
                     child: Align(
                       alignment: Alignment.center,
                       child: FittedBox(
-                        child: Text(
+                        child: AutoSizeText(
                           isInfo
                               ? "Informasi Mobil"
                               : isMenuAdmin
@@ -59,6 +60,7 @@ class RentCarView extends GetView<RentCarController> {
                                   : "Sewa Mobil",
                           style: AppTexts.primaryPBold
                               .copyWith(fontSize: 18, color: Colors.black),
+                          maxLines: 1,
                         ),
                       ),
                     ),

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:icp_gahara_mobile/app/common/utils/extensions.dart';
@@ -45,10 +46,11 @@ class FormDetailRentCarView extends GetView<FormRentCarController> {
                   Expanded(
                     child: Align(
                       alignment: Alignment.center,
-                      child: Text(
+                      child: AutoSizeText(
                         'Sewa Mobil',
                         style: AppTexts.primaryPBold
                             .copyWith(fontSize: 18, color: Colors.black),
+                        maxLines: 1,
                       ),
                     ),
                   ),

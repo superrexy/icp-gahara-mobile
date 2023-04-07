@@ -42,7 +42,7 @@ class HomeView extends GetView<HomeController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Gahara Rent Car", style: AppTexts.primaryPBold),
+                AutoSizeText("Gahara Rent Car", style: AppTexts.primaryPBold),
                 Container(
                   width: 40.w,
                   height: 35.h,

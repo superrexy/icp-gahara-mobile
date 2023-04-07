@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -47,10 +48,11 @@ class ChoosePaymentView extends GetView<FormRentCarController> {
                   Flexible(
                     child: Align(
                       alignment: Alignment.center,
-                      child: Text(
+                      child: AutoSizeText(
                         'Pembayaran',
                         style: AppTexts.primaryPBold
                             .copyWith(fontSize: 18.sp, color: Colors.black),
+                        maxLines: 1,
                       ),
                     ),
                   ),
